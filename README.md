@@ -30,7 +30,7 @@ HRIS (Human Resource Information System) adalah aplikasi web dan mobile yang dir
 
 ## 🧱 Diagram Arsitektur
 
-![alt text](assets/diagram.png)
+![alt text](public/image/diagram.png)
 
 ### 🧩 Fungsi Utama Tiap Komponen
 
