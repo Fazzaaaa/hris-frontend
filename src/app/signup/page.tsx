@@ -16,7 +16,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [formError, setFormError] = useState("");
-  const router = useRouter(); // Hook untuk navigasi
+  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -26,7 +26,6 @@ export default function SignUpPage() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  // Fungsi untuk mengarahkan ke contohDashboard setelah Sign Up
   const handleSignUp = () => {
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       setFormError("All fields are required.");
@@ -38,7 +37,6 @@ export default function SignUpPage() {
       return;
     }
 
-    // Reset error and navigate if form is valid
     setFormError("");
     router.push("/contohDashboard");
   };

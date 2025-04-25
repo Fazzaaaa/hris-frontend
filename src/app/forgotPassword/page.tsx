@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Menggunakan useRouter untuk navigasi
+import { useRouter } from "next/navigation"; 
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState(""); // State untuk menyimpan email
-  const router = useRouter(); // Menggunakan router untuk navigasi
+  const [email, setEmail] = useState(""); 
+  const router = useRouter(); 
 
   const handleResetPassword = () => {
     if (email) {
-      router.push("/checkEmail"); // Mengarahkan ke halaman checkEmail saat email terisi
+      router.push("/checkEmail"); 
     } else {
-      alert("Please enter a valid email address!"); // Pemberitahuan jika email belum diisi
+      alert("Please enter a valid email address!"); 
     }
   };
 
@@ -37,12 +37,12 @@ export default function ForgotPassword() {
               className="w-full p-2 border border-gray-300 rounded text-black"
               placeholder="Enter your email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} // Mengupdate state email saat diketik
+              onChange={(e) => setEmail(e.target.value)} 
             />
           </div>
 
           <button
-            onClick={handleResetPassword} // Menangani klik tombol Reset Password
+            onClick={handleResetPassword} 
             className="w-full bg-gray-500 text-white p-2 rounded mb-6"
           >
             Reset Password

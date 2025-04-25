@@ -1,51 +1,72 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Menggunakan useRouter untuk navigasi
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function NewPassword() {
-  const [email, setEmail] = useState(""); // State untuk menyimpan email
-  const router = useRouter(); // Menggunakan router untuk navigasi
+export default function SetNewPassword() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const router = useRouter();
 
-  const handleResetPassword = () => {
-    if (email) {
-      router.push("/checkEmail"); // Mengarahkan ke halaman checkEmail saat email terisi
-    } else {
-      alert("Please enter a valid email address!"); // Pemberitahuan jika email belum diisi
+  const handleSetPassword = () => {
+    if (!password || !confirmPassword) {
+      alert("Please fill in both fields!");
+      return;
     }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    router.push("/successReset");
   };
 
   return (
     <div className="flex min-h-screen">
-      {/* Kiri (Putih - Form) */}
+      {/* Kiri (Form) */}
       <div className="w-1/2 bg-white px-16 py-8 flex flex-col items-center justify-center text-center">
         <div className="max-w-lg w-full">
-          <h1 className="text-2xl font-bold text-black mb-4">Forgot Password</h1>
+          <h1 className="text-2xl font-bold text-black mb-4">Set New Password</h1>
           <p className="text-sm text-black mb-6 leading-relaxed">
-            No worries! Enter your email address below, and we’ll <br /> send you a link to reset your password.
+            Enter your new password below to complete the reset process. <br />Ensure it's strong and secure.
           </p>
 
           <div className="mb-4 text-left">
-            <label htmlFor="email" className="block text-sm text-black mb-2">
-              Email
+            <label htmlFor="password" className="block text-sm text-black mb-2">
+              New Password
             </label>
             <input
-              id="email"
-              type="email"
+              id="password"
+              type="password"
               className="w-full p-2 border border-gray-300 rounded text-black"
-              placeholder="Enter your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} // Mengupdate state email saat diketik
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="mb-6 text-left">
+            <label htmlFor="confirmPassword" className="block text-sm text-black mb-2">
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
+              type="password"
+              className="w-full p-2 border border-gray-300 rounded text-black"
+              placeholder="Confirm new password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
 
           <button
-            onClick={handleResetPassword} // Menangani klik tombol Reset Password
-            className="w-full bg-gray-500 text-white p-2 rounded mb-6"
+            onClick={handleSetPassword}
+            className="w-full bg-gray-600 text-white p-2 rounded mb-6"
           >
-            Reset Password
+            Reset password
           </button>
 
           <Link
@@ -57,7 +78,7 @@ export default function NewPassword() {
         </div>
       </div>
 
-      {/* Kanan (Biru - Logo) */}
+      {/* Kanan (Gambar) */}
       <div className="w-1/2 bg-[#7CA5BF] flex items-center justify-center">
         <Image src="/image/logo1.png" alt="Logo" width={400} height={400} />
       </div>
