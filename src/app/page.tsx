@@ -34,7 +34,4 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
 import { redirect } from 'next/navigation';
 
-export default function Home() {
-  redirect('/signup');
-}
 
