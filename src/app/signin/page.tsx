@@ -4,14 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { useRouter } from "next/navigation"; // Hook for navigation
+import { useRouter } from "next/navigation"; 
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
-  const router = useRouter(); // Hook for navigating to another page
+  const router = useRouter(); 
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -23,7 +23,6 @@ export default function SignInPage() {
       return;
     }
 
-    // Reset error and navigate if form is valid
     setFormError("");
     router.push("/contohDashboard");
   };
@@ -108,7 +107,7 @@ export default function SignInPage() {
         <button
           onClick={handleSignIn}
           className="w-full bg-gray-500 text-white p-2 rounded mb-4"
-          disabled={!email || !password} // Disable if any field is empty
+          disabled={!email || !password} 
         >
           SIGN IN
         </button>

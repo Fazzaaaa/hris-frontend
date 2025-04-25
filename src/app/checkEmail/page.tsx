@@ -5,10 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function CheckEmail() {
-  const router = useRouter(); // Menggunakan router untuk navigasi
+  const router = useRouter(); 
 
   const handleResendEmail = () => {
-    alert("Resending email..."); // Fungsi untuk mengirim ulang email, bisa disesuaikan dengan implementasi backend
+    alert("Resending email..."); 
+  };
+
+  const handleOpenGmail = () => {
+    router.push("/newPassword"); 
   };
 
   return (
@@ -28,7 +32,10 @@ export default function CheckEmail() {
           </p>
 
           {/* "Open Gmail" Button */}
-          <button className="w-full bg-gray-600 text-white p-2 rounded mb-6">
+          <button
+            onClick={handleOpenGmail}
+            className="w-full bg-gray-600 text-white p-2 rounded mb-6"
+          >
             Open Gmail
           </button>
 

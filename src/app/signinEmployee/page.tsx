@@ -1,15 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export default function SignInEmployee() {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSignIn = () => {
+    router.push("/contohDashboard");
   };
 
   return (
@@ -91,7 +97,10 @@ export default function SignInEmployee() {
           </Link>
         </div>
 
-        <button className="w-full    bg-gray-500 text-white p-2 rounded mb-4">
+        <button
+          onClick={handleSignIn}
+          className="w-full bg-gray-500 text-white p-2 rounded mb-4"
+        >
           SIGN IN
         </button>
 
