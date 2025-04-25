@@ -1,3 +1,4 @@
+
 'use client'
 
 import React from 'react'
@@ -30,3 +31,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   )
 }
+
+import { redirect } from 'next/navigation';
+
+export default function Home() {
+  redirect('/signup');
+}
+
