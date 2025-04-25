@@ -47,10 +47,11 @@ export default function SuccessReset() {
         </div>
       </div>
 
-      {/* Kanan (Logo) */}
+      {/* Kanan (Logo)dsdsdsdsdsdsd */}
       <div className="w-1/2 bg-[#7CA5BF] flex items-center justify-center">
         <Image src="/image/logo1.png" alt="Logo" width={400} height={400} />
       </div>
     </div>
+
   );
 }
