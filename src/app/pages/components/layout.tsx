@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import Sidebar from './pages/components/sidebar'
-import Navbar from './pages/components/navbar'
+import Sidebar from './sidebar'
+import Navbar from './navbar'
 import { usePathname } from 'next/navigation'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
