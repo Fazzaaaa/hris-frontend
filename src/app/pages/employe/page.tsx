@@ -1,9 +1,8 @@
-
 'use client'
 
 import React from 'react'
-import Sidebar from './pages/components/sidebar'
-import Navbar from './pages/components/navbar'
+import Sidebar from '@/app/pages/components/sidebar'
+import Navbar from '@/app/pages/components/navbar'
 import { usePathname } from 'next/navigation'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -31,10 +30,3 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   )
 }
-
-import { redirect } from 'next/navigation';
-
-export default function Home() {
-  redirect('/signup');
-}
-
