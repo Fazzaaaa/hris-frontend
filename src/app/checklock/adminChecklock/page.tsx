@@ -40,7 +40,7 @@ const Checkclock = () => {
   };
 
   const goToAddPage = () => {
-    router.push("http://localhost:3000/pages/admin/checkclock/addCheckclock");
+    router.push("http://localhost:3000/checklock/adminChecklock/addChecklock");
   };
 
   return (

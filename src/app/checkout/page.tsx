@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 const CheckoutPage = () => {
@@ -20,14 +21,16 @@ const CheckoutPage = () => {
         <div>
           {/* Logo and HRIS */}
           <div className="flex items-center space-x-3 mb-6">
-            <Image src="/logo.png" alt="Logo" width={40} height={40} />
+            <Image src="/images/vector-hris.png" alt="HRIS Logo" width={40} height={40} />
             <p className="font-semibold text-lg self-center">HRIS</p>
           </div>
 
           <h1 className="text-3xl font-bold mb-2">Premium</h1>
           <p className="text-sm text-gray-500 mb-4">upgrade to premium</p>
 
-          <p className="text-sm font-medium text-black mb-4 cursor-pointer">Change plan</p>
+          <Link href="/pricing" className="text-sm text-blue-600 underline mb-4 block hover:text-blue-800 transition">
+            Change plan
+          </Link>
 
           {/* Billing Period */}
           <div className="mb-6">
@@ -37,13 +40,13 @@ const CheckoutPage = () => {
                 className={`border px-4 py-2 rounded ${billingPeriod === 'single' ? 'border-black font-semibold' : 'text-gray-600'}`}
                 onClick={() => setBillingPeriod('single')}
               >
-                Single Payment - Rp 17.000 / User
+                Single Payment - Rp 17,000 / User
               </button>
               <button
                 className={`border px-4 py-2 rounded ${billingPeriod === 'monthly' ? 'border-black font-semibold' : 'text-gray-600'}`}
                 onClick={() => setBillingPeriod('monthly')}
               >
-                Monthly - Rp 17.000 / User
+                Monthly - Rp 17,000 / User
               </button>
             </div>
           </div>

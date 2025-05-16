@@ -26,7 +26,7 @@ export default function Navbar({ title }: { title: string })  {
           <FiBell className="text-lg" />
         </div>
         <FaUserCircle className="text-2xl" />
-        <span className="text-sm">Admin ⏷</span>
+        <span className="text-sm">   ⏷</span>
       </div>
     </div>
   );

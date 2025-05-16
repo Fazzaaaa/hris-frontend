@@ -3,19 +3,100 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Component for individual package card
-const PackageCard = ({
-  title,
-  description,
-  features,
-  onSelect,
-}: {
+// Types
+type PackageType = {
   title: string;
   description: string;
   features: string[];
-  onSelect: () => void;
-}) => (
-  <div className="bg-gray-100 rounded-2xl p-6 shadow text-left transition-all transform hover:scale-105 hover:bg-gray-300 hover:shadow-xl border border-gray-300 group">
+};
+
+type SeatType = {
+  name: string;
+  price: number | string;
+  description: string;
+};
+
+// Dummy Data
+const packageData: PackageType[] = [
+  {
+    title: "Nama Paket",
+    description: "Best for growing business",
+    features: [
+      "Feature list",
+      "GPS-based attendance validation",
+      "Employee data management",
+      "Leave & time-off request",
+      "Overtime management (government regulation)",
+      "Fixed work schedule management",
+      "Automatic tax calculation",
+    ],
+  },
+  {
+    title: "Premium",
+    description: "Best for growing business",
+    features: [
+      "All Standard features ✔",
+      "Click-in & Clock-out attendance settings ✔",
+      "Fingerprint integration ✔",
+      "Employee document management ✔",
+      "Sick leave & time-off settings ✔",
+      "Shift management ✔",
+      "Comprehensive reports ✔",
+      "Overtime management (gov & custom rules) ✔",
+    ],
+  },
+  {
+    title: "Ultra",
+    description: "Best for growing business",
+    features: [
+      "All Premium features",
+      "Face Recognition",
+      "Automated check-out attendance",
+      "Employee turnover dashboard",
+      "Custom dashboard for statistics & analysis",
+    ],
+  },
+];
+
+const seatData: SeatType[] = [
+  {
+    name: "STANDARD",
+    price: 15000,
+    description: "This package for 1 until 50 employee",
+  },
+  {
+    name: "PREMIUM",
+    price: 15000,
+    description: "This package for 1 until 50 employee",
+  },
+  {
+    name: "ULTRA",
+    price: 15000,
+    description: "This package for 1 until 50 employee",
+  },
+  {
+    name: "Nama Paket",
+    price: "Harga",
+    description: "Deskripsi jumlah karyawan yang bisa menggunakan",
+  },
+  {
+    name: "Nama Paket",
+    price: "Harga",
+    description: "Deskripsi jumlah karyawan yang bisa menggunakan",
+  },
+  {
+    name: "Nama Paket",
+    price: "Harga",
+    description: "Deskripsi jumlah karyawan yang bisa menggunakan",
+  },
+];
+
+// Components
+const PackageCard = ({ title, description, features, onSelect }: PackageType & { onSelect: () => void }) => (
+  <div
+    className="bg-gray-100 rounded-2xl p-6 shadow text-left transition-all transform hover:scale-105 hover:bg-gray-300 hover:shadow-xl border border-gray-300 group"
+    data-testid={`package-card-${title}`}
+  >
     <div className="relative">
       <h2 className="text-xl font-semibold text-gray-400 group-hover:text-white group-hover:bg-gray-800 group-hover:rounded-md transition-all px-3 py-1 inline-block">
         {title}
@@ -36,23 +117,15 @@ const PackageCard = ({
   </div>
 );
 
-// Component for individual seat card
-const SeatCard = ({
-  name,
-  price,
-  description,
-  onSelect,
-}: {
-  name: string;
-  price: number | string;
-  description: string;
-  onSelect: () => void;
-}) => (
-  <div className="bg-gray-100 rounded-xl p-6 shadow text-left flex flex-col justify-between">
+const SeatCard = ({ name, price, description, onSelect }: SeatType & { onSelect: () => void }) => (
+  <div
+    className="bg-gray-100 rounded-xl p-6 shadow text-left flex flex-col justify-between"
+    data-testid={`seat-card-${name}`}
+  >
     <h2 className="text-base font-semibold text-gray-400">{name}</h2>
     <p className="text-2xl font-bold text-gray-400 mt-2">
-      Rp {typeof price === "number" ? price.toLocaleString("id-ID") : price}{" "}
-      <span className="text-sm font-normal text-gray-400">/user/month</span>
+      Rp {typeof price === "number" ? price.toLocaleString("id-ID") : price}
+      <span className="text-sm font-normal text-gray-400"> /user/month</span>
     </p>
     <p className="text-sm mt-2 text-gray-500">{description}</p>
     <button
@@ -68,7 +141,7 @@ export default function PricingPage() {
   const [activeTab, setActiveTab] = useState<"Package" | "Seat">("Package");
   const router = useRouter();
 
-  const goToCheckout = () => router.push("/pages/checkout");
+  const goToCheckout = () => router.push("/checkout");
 
   const tabButton = (tab: "Package" | "Seat") =>
     `px-4 py-2 text-sm font-medium transition-all ${
@@ -77,84 +150,10 @@ export default function PricingPage() {
         : "bg-gray-300 text-black hover:bg-gray-400"
     }`;
 
-  const packageData = [
-    {
-      title: "Nama Paket",
-      description: "Best for growing business",
-      features: [
-        "Feature list",
-        "GPS-based attendance validation",
-        "Employee data management",
-        "Leave & time-off request",
-        "Overtime management (government regulation)",
-        "Fixed work schedule management",
-        "Automatic tax calculation",
-      ],
-    },
-    {
-      title: "Premium",
-      description: "Best for growing business",
-      features: [
-        "All Standard features ✔",
-        "Click-in & Clock-out attendance settings ✔",
-        "Fingerprint integration ✔",
-        "Employee document management ✔",
-        "Sick leave & time-off settings ✔",
-        "Shift management ✔",
-        "Comprehensive reports ✔",
-        "Overtime management (gov & custom rules) ✔",
-      ],
-    },
-    {
-      title: "Ultra",
-      description: "Best for growing business",
-      features: [
-        "All Premium features",
-        "Face Recognition",
-        "Automated check-out attendance",
-        "Employee turnover dashboard",
-        "Custom dashboard for statistics & analysis",
-      ],
-    },
-  ];
-
-  const seatData = [
-    {
-      name: "STANDARD",
-      price: 15000,
-      description: "This package for 1 until 50 employee",
-    },
-    {
-      name: "PREMIUM",
-      price: 15000,
-      description: "This package for 1 until 50 employee",
-    },
-    {
-      name: "ULTRA",
-      price: 15000,
-      description: "This package for 1 until 50 employee",
-    },
-    {
-      name: "Nama Paket",
-      price: "Harga",
-      description: "Deskripsi jumlah karyawan yang bisa menggunakan",
-    },
-    {
-      name: "Nama Paket",
-      price: "Harga",
-      description: "Deskripsi jumlah karyawan yang bisa menggunakan",
-    },
-    {
-      name: "Nama Paket",
-      price: "Harga",
-      description: "Deskripsi jumlah karyawan yang bisa menggunakan",
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-white text-center px-4 py-10">
+    <div className="min-h-screen text-center px-4 py-10" style={{ backgroundColor: "#7CA5BF" }}>
       <h1 className="text-5xl font-bold text-black mb-4">HRIS Pricing Plans</h1>
-      <p className="mt-2 text-m text-gray-600 max-w-md mx-auto mb-4">
+      <p className="mt-2 text-m text-gray-100 max-w-md mx-auto mb-4">
         Choose the plan that suits your business! This HRIS offers both
         subscription and pay-as-you-go payment options, available in the
         following packages.

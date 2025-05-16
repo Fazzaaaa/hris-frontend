@@ -19,9 +19,9 @@ import {
     ];
   
     return (
-      <div className="w-16 h-screen bg-[#1C3D5A] flex flex-col items-center py-4 gap-6 shadow-md">
+      <div className="w-16 h-screen bg-[#2f5a80] flex flex-col items-center py-4 gap-6 shadow-md">
         {/* Logo */}
-        <img src="/logo.png" alt="Logo" className="w-6 h-auto" />
+        <img src="/images/vector-hris.png" alt="Logo HRIS" className="w-6 h-auto" />
   
         {/* Menu Items */}
         <div className="flex flex-col items-center gap-6 mt-4">

@@ -12,7 +12,7 @@ export default function CheckEmail() {
   };
 
   const handleOpenGmail = () => {
-    router.push("/newPassword"); 
+    router.push("/auth/newPassword"); 
   };
 
   return (
@@ -52,7 +52,7 @@ export default function CheckEmail() {
 
           {/* Back to Login Button */}
           <Link
-            href="/signin"
+            href="/auth/loginAdmin"
             className="flex items-center justify-center text-sm text-blue-600 hover:underline"
           >
             <span className="mr-2">&#8592;</span> Back to log in
@@ -61,8 +61,8 @@ export default function CheckEmail() {
       </div>
 
       {/* Kanan (Biru - Logo) */}
-      <div className="w-1/2 bg-[#7CA5BF] flex items-center justify-center">
-        <Image src="/image/logo1.png" alt="Logo" width={400} height={400} />
+      <div className="w-1/2 bg-[#9cd0f1] flex items-center justify-center">
+        <Image src="/images/logo-hris-1.png" alt="Logo" width={400} height={400} />
       </div>
     </div>
   );
