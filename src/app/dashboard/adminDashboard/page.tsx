@@ -1,9 +1,8 @@
-
 'use client'
 
 import React from 'react'
-import Sidebar from './components/sidebar'
-import Navbar from './components/navbar'
+import Sidebar from '@/app/components/sidebar'
+import Navbar from '@/app/components/navbar'
 import { usePathname } from 'next/navigation'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -31,6 +30,3 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   )
 }
-
-
-
