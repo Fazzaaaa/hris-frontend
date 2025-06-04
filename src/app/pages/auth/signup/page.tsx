@@ -38,7 +38,7 @@ export default function SignUpPage() {
     }
 
     setFormError("");
-    router.push("/contohDashboard");
+    router.push("/pages/auth/Dashboard");
   };
 
   return (
@@ -52,7 +52,7 @@ export default function SignUpPage() {
       <div className="w-1/2 bg-white p-8">
         <div className="flex justify-between items-center mb-8">
           <Image src="/image/logo1.png" alt="Logo" width={120} height={40} />
-          <Link href="/signin" className="text-blue-600 text-sm font-medium underline hover:opacity-80">
+          <Link href="/pages/auth/signin" className="text-blue-600 text-sm font-medium underline hover:opacity-80">
             Login here!
           </Link>
         </div>
@@ -176,7 +176,7 @@ export default function SignUpPage() {
 
         <div className="text-center mt-6">
           <span className="text-black">Already have an account? </span>
-          <Link href="/signin" className="text-blue-600 font-medium hover:underline">
+          <Link href="/pages/auth/signin" className="text-blue-600 font-medium hover:underline">
             Sign in here
           </Link>
         </div>

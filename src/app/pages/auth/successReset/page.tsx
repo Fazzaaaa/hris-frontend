@@ -8,7 +8,7 @@ export default function SuccessReset() {
   const router = useRouter();
 
   const handleGoToLogin = () => {
-    router.push("/signin");
+    router.push("/pages/auth/signin");
   };
 
   return (
@@ -16,13 +16,20 @@ export default function SuccessReset() {
       {/* Kiri (Putih - Konten) */}
       <div className="w-1/2 bg-white px-16 py-8 flex flex-col items-center justify-center text-center">
         <div className="max-w-lg w-full">
-          {/* Icon atau Ilustrasi Sukses */}
-          <div className="mb-6 w-24 h-24 bg-green-500 rounded-full mx-auto flex items-center justify-center text-white text-3xl font-bold">
-            ✓
+          {/* Ganti ikon centang dengan gambar success_reset */}
+          <div className="mb-6 flex justify-center items-center">
+            <Image
+              src="/image/success_reset.png"
+              alt="Success"
+              width={96}
+              height={96}
+            />
           </div>
 
           {/* Judul */}
-          <h1 className="text-2xl font-bold text-black mb-4">Your password has been successfully reset  </h1>
+          <h1 className="text-2xl font-bold text-black mb-4">
+            Your password has been successfully reset
+          </h1>
 
           {/* Informasi */}
           <p className="text-sm text-black mb-6 leading-relaxed">
@@ -39,7 +46,7 @@ export default function SuccessReset() {
 
           {/* Back to log in via Link juga jika mau */}
           <Link
-            href="/signin"
+            href="/pages/auth/signin"
             className="flex items-center justify-center text-sm text-blue-600 hover:underline"
           >
             <span className="mr-2">&#8592;</span> Back to log in
@@ -47,11 +54,10 @@ export default function SuccessReset() {
         </div>
       </div>
 
-      {/* Kanan (Logo)dsdsdsdsdsdsd */}
+      {/* Kanan (Logo) */}
       <div className="w-1/2 bg-[#7CA5BF] flex items-center justify-center">
         <Image src="/image/logo1.png" alt="Logo" width={400} height={400} />
       </div>
     </div>
-
   );
 }
