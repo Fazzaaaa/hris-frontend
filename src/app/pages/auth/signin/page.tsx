@@ -24,7 +24,7 @@ export default function SignInPage() {
     }
 
     setFormError("");
-    router.push("/contohDashboard");
+    router.push("/pages/auth/Dashboard");
   };
 
   return (
@@ -39,7 +39,7 @@ export default function SignInPage() {
         <div className="flex justify-between items-center mb-8">
           <Image src="/image/logo1.png" alt="Logo" width={120} height={40} />
           <Link
-            href="/signup"
+            href="/pages/auth/signup"
             className="text-sm underline underline-offset-2 text-blue-600 hover:text-blue-800"
           >
             Try for free!
@@ -99,7 +99,7 @@ export default function SignInPage() {
             />
             Remember me
           </label>
-          <Link href="/forgotPassword" className="text-sm text-blue-600 hover:underline">
+          <Link href="/pages/auth/forgotPassword" className="text-sm text-blue-600 hover:underline">
             Forgot Password?
           </Link>
         </div>
@@ -118,7 +118,7 @@ export default function SignInPage() {
           </div>
 
           <Link
-            href="/signinEmployee"
+            href="/pages/auth/signinEmployee"
             className="block border border-black rounded p-2 text-center cursor-pointer hover:bg-gray-100 transition text-black"
           >
             Sign in with ID Employee
@@ -127,7 +127,7 @@ export default function SignInPage() {
 
         <div className="text-center mt-6">
           <span className="text-black">Don't have an account? </span>
-          <Link href="/signup" className="text-blue-600 font-medium hover:underline">
+          <Link href="/pages/auth/signup" className="text-blue-600 font-medium hover:underline">
             Sign up now and get started
           </Link>
         </div>

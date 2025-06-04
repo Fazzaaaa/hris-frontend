@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState(""); 
-  const router = useRouter(); 
+  const [email, setEmail] = useState("");
+  const router = useRouter();
 
   const handleResetPassword = () => {
     if (email) {
-      router.push("/checkEmail"); 
+      router.push(`/pages/auth/checkEmail?email=${encodeURIComponent(email)}`);
     } else {
-      alert("Please enter a valid email address!"); 
+      alert("Please enter a valid email address!");
     }
   };
 
@@ -37,19 +37,19 @@ export default function ForgotPassword() {
               className="w-full p-2 border border-gray-300 rounded text-black"
               placeholder="Enter your email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} 
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           <button
-            onClick={handleResetPassword} 
+            onClick={handleResetPassword}
             className="w-full bg-gray-500 text-white p-2 rounded mb-6"
           >
             Reset Password
           </button>
 
           <Link
-            href="/signin"
+            href="/pages/auth/signin"
             className="flex items-center justify-center text-sm text-blue-600 hover:underline"
           >
             <span className="mr-2">&#8592;</span> Back to log in
