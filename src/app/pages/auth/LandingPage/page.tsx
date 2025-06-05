@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Dashboard() {
+export default function LandingPage() {
   const [activeTab, setActiveTab] = useState<"Package" | "Seat">("Package");
   const router = useRouter();
 

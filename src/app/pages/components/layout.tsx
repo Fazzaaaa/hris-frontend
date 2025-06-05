@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const title = getTitleFromPath(pathname)
 
   return (
-    <div className="flex min-h-screen">
+<div className="flex min-h-screen bg-[#7CA5BF]">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Navbar title={title} />
