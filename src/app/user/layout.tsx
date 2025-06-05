@@ -1,16 +1,16 @@
 'use client'
 
 import React from 'react'
-import Sidebar from '@/app/components/sidebar'
-import Navbar from '@/app/components/navbar'
+import Sidebar from '@/components/Sidebar'
+import Navbar from '@/components/Navbar'
 import { usePathname } from 'next/navigation'
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   const getTitleFromPath = (path: string) => {
     const parts = path.split('/').filter(Boolean)
-    const lastPart = parts[parts.length - 1] || 'Dashboard'
+    const lastPart = parts[parts.length - 1] || 'Admin'
     return lastPart
       .replace(/-/g, ' ')
       .replace(/\b\w/g, (char) => char.toUpperCase())
@@ -21,8 +21,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Navbar title={title} />
+      <div className="flex-1 flex flex-col bg-[#7ca5bf]">
+        <Navbar title={title}/>
         <main className="p-4">
           {children}
         </main>

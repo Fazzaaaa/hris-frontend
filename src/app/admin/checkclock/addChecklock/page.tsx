@@ -1,8 +1,11 @@
 // components/AddCheckClock.js
 "use client";
 import { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
 const AddCheckClock = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [employee, setEmployee] = useState('');
   const [absenceType, setAbsenceType] = useState('');
   const [location, setLocation] = useState('');
