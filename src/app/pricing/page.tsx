@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { MdClose } from "react-icons/md";
 
 // Types
 type PackageType = {
@@ -141,7 +142,7 @@ export default function PricingPage() {
   const [activeTab, setActiveTab] = useState<"Package" | "Seat">("Package");
   const router = useRouter();
 
-  const goToCheckout = () => router.push("/checkout");
+  const goToCheckout = () => router.push("/pricing/checkout");
 
   const tabButton = (tab: "Package" | "Seat") =>
     `px-4 py-2 text-sm font-medium transition-all ${
@@ -152,6 +153,13 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen text-center px-4 py-10" style={{ backgroundColor: "#7CA5BF" }}>
+      <button
+        onClick={() => router.push("/admin/dashboard")}
+        className="absolute top-4 right-4 text-black hover:text-white bg-gray-200 hover:bg-gray-600 p-1 rounded-full transition"
+        aria-label="Close"
+      >
+        <MdClose size={24} />
+      </button>
       <h1 className="text-5xl font-bold text-black mb-4">HRIS Pricing Plans</h1>
       <p className="mt-2 text-m text-gray-100 max-w-md mx-auto mb-4">
         Choose the plan that suits your business! This HRIS offers both

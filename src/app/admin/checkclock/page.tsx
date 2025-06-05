@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePageTitle } from '@/context/PageTitleContext';
 
 const checkclockData = [
   { image: "", nama: "Sony Febri Hari Wibowo", jabatan: "tes", clockIn: "09:28 AM", clockOut: "04:00 PM", workHours: "10h 5m", approval: "accept", status: "On Time" },
@@ -22,6 +23,9 @@ const checkclockData = [
 ];
 
 const Checkclock = () => {
+  const { setTitle } = usePageTitle();
+  setTitle("Checkclock");
+
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -40,65 +44,65 @@ const Checkclock = () => {
   };
 
   const goToAddPage = () => {
-    router.push("http://localhost:3000/checklock/adminChecklock/addChecklock");
+    router.push("http://localhost:3000/admin/checkclock/addChecklock");
   };
 
   return (
-    <div className="w-screen min-h-screen p-5 bg-white text-black">
-      <div className="flex items-center gap-3 mb-4 ml-10 mr-10 flex-wrap">
-        <h1 className="text-2xl font-bold">Checkclock Overview</h1>
+    <div className="w-full min-h-screen p-3 bg-white text-black text-sm rounded-lg">
+      <div className="flex items-center gap-2 mb-3 mx-5 flex-wrap">
+        <h1 className="text-xl font-semibold">Checkclock Overview</h1>
         <input
           type="text"
           placeholder="Search Employee"
-          className="p-2 border rounded-md flex-1 min-w-[200px]"
+          className="p-1 border rounded-md flex-1 min-w-[150px]"
         />
-        <button className="p-2 bg-white-200 border border-black text-black rounded-md whitespace-nowrap">
+        <button className="p-1 border border-black text-black rounded-md whitespace-nowrap">
           Filter
         </button>
-        <button onClick={goToAddPage} className="p-2 bg-gray-500 text-white rounded-md whitespace-nowrap">
+        <button onClick={goToAddPage} className="p-1 bg-gray-500 text-white rounded-md whitespace-nowrap">
           + Tambah Data
         </button>
       </div>
 
-      <div className="m-10 overflow-x-auto">
-        <table className="min-w-full bg-white table-auto">
+      <div className="mx-5 overflow-x-auto">
+        <table className="min-w-full bg-white table-auto text-xs">
           <thead>
             <tr className="bg-white-100 text-left">
-              <th className="py-2 px-4 border-b w-1/5">Employee Name</th>
-              <th className="py-2 px-4 border-b w-1/6">Jabatan</th>
-              <th className="py-2 px-4 border-b w-1/6">Clock In</th>
-              <th className="py-2 px-4 border-b w-1/6">Clock Out</th>
-              <th className="py-2 px-4 border-b w-1/6">Work Hours</th>
-              <th className="py-2 px-4 border-b w-1/6">Approve</th>
-              <th className="py-2 px-4 border-b w-1/6">Status</th>
-              <th className="py-2 px-4 border-b w-1/6">Detail</th>
+              <th className="py-1 px-2 border-b">Employee</th>
+              <th className="py-1 px-2 border-b">Jabatan</th>
+              <th className="py-1 px-2 border-b">In</th>
+              <th className="py-1 px-2 border-b">Out</th>
+              <th className="py-1 px-2 border-b">Hours</th>
+              <th className="py-1 px-2 border-b">Approve</th>
+              <th className="py-1 px-2 border-b">Status</th>
+              <th className="py-1 px-2 border-b">Detail</th>
             </tr>
           </thead>
           <tbody>
             {currentData.map((entry, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b">
-                  <div className="flex items-center space-x-3">
+                <td className="py-1 px-2 border-b">
+                  <div className="flex items-center space-x-2">
                     <img
-                      src={entry.image || "https://via.placeholder.com/40"}
+                      src={entry.image || "https://via.placeholder.com/32"}
                       alt={entry.nama}
-                      className="w-10 h-10 rounded-full object-cover"
+                      className="w-8 h-8 rounded-full object-cover"
                     />
                     <span className="whitespace-nowrap">{entry.nama}</span>
                   </div>
                 </td>
-                <td className="py-2 px-4 border-b">{entry.jabatan}</td>
-                <td className="py-2 px-4 border-b">{entry.clockIn}</td>
-                <td className="py-2 px-4 border-b">{entry.clockOut}</td>
-                <td className="py-2 px-4 border-b">{entry.workHours}</td>
-                <td className="py-2 px-4 border-b">{entry.approval}</td>
-                <td className="py-2 px-4 border-b">
-                  <span className="inline-block bg-gray-200 text-gray-700 px-3 py-1 rounded whitespace-nowrap">
+                <td className="py-1 px-2 border-b">{entry.jabatan}</td>
+                <td className="py-1 px-2 border-b">{entry.clockIn}</td>
+                <td className="py-1 px-2 border-b">{entry.clockOut}</td>
+                <td className="py-1 px-2 border-b">{entry.workHours}</td>
+                <td className="py-1 px-2 border-b">{entry.approval}</td>
+                <td className="py-1 px-2 border-b">
+                  <span className="inline-block bg-gray-200 text-gray-700 px-2 py-0.5 rounded whitespace-nowrap">
                     {entry.status}
                   </span>
                 </td>
-                <td className="py-2 px-4 border-b">
-                  <button className="p-2 bg-white text-black rounded-md border border-gray-300">
+                <td className="py-1 px-2 border-b">
+                  <button className="px-2 py-0.5 bg-white text-black rounded-md border border-gray-300 text-xs">
                     View
                   </button>
                 </td>
@@ -109,9 +113,9 @@ const Checkclock = () => {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-between mr-10 ml-10 mt-10 flex-wrap gap-2">
+      <div className="flex justify-between mx-5 mt-5 flex-wrap gap-2 text-sm">
         <div>
-          <span>Showing </span>
+          <span>Show </span>
           <select onChange={handleItemsPerPageChange} value={itemsPerPage} className="ml-1 p-1 border rounded-md">
             <option>10</option>
             <option>20</option>
@@ -119,17 +123,17 @@ const Checkclock = () => {
           </select>
         </div>
         <span className="text-gray-500">
-          Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, checkclockData.length)} out of {checkclockData.length} records
+          Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, checkclockData.length)} of {checkclockData.length}
         </span>
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1 flex-wrap">
           {Array.from({ length: pageCount }, (_, i) => i + 1).map((pageNum) => (
             <button
               key={pageNum}
               onClick={() => setCurrentPage(pageNum)}
-              className={`px-3 py-1 rounded-md ${
+              className={`px-2 py-1 rounded-md text-xs ${
                 currentPage === pageNum
                   ? "bg-gray-300 text-white font-bold"
-                  : "bg-white text-gray-500"
+                  : "bg-white text-gray-500 border border-gray-200"
               }`}
             >
               {pageNum}
