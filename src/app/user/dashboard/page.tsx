@@ -1,229 +1,320 @@
-'use client';
+    'use client'
 
-import { useState } from 'react';
-import { FaHourglassHalf, FaRegCalendarCheck, FaRegCalendarMinus, FaCalendarTimes } from 'react-icons/fa';
-import { useRouter } from "next/navigation";
+    // import DashboardLayout from '@/app/components/ui'
+    import React, { useState } from 'react'
+    import {
+    PieChart,
+    Pie,
+    Cell,
+    ResponsiveContainer,
+    Label,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    CartesianGrid,
+    } from 'recharts'
 
-// Import Recharts components secara langsung
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from 'recharts';
+    export default function DashboardPage() {
+    const [dropdownOpen, setDropdownOpen] = useState(false)
+    const [selectedOption, setSelectedOption] = useState('Pilih Rentang Tanggal')
+    const [selectedMonth, setSelectedMonth] = useState('Juni 2025')
+    const [monthDropdownOpen, setMonthDropdownOpen] = useState(false)
+    const [leaveDropdownOpen, setLeaveDropdownOpen] = useState(false)
+    const [selectedLeaveRange, setSelectedLeaveRange] = useState('Rentang Waktu')
 
+    // Tambahan dropdown baru untuk "view by week"
+    const [weekDropdownOpen, setWeekDropdownOpen] = useState(false)
+    const [selectedWeek, setSelectedWeek] = useState('View by Week')
 
-// Data untuk kartu header (Waktu Kerja, Tepat Waktu, Terlambat, Absen)
-const userDataCards = [
-  { id: 'workHours', title: 'Jam Kerja Saya', value: '160h 45m', icon: <FaHourglassHalf className="text-blue-500" /> },
-  { id: 'onTime', title: 'Tepat Waktu', value: '25', icon: <FaRegCalendarCheck className="text-green-500" /> },
-  { id: 'late', title: 'Terlambat', value: '3', icon: <FaRegCalendarMinus className="text-yellow-500" /> },
-  { id: 'absent', title: 'Absen', value: '1', icon: <FaCalendarTimes className="text-red-500" /> },
-];
+    const dateOptions = ['7 Hari Terakhir', '30 Hari Terakhir', 'Bulan Ini']
+    const monthOptions = ['Mei 2025', 'Juni 2025', 'Juli 2025']
+    const weekOptions = ['Week 1', 'Week 2', 'Week 3', 'Week 4']
 
-// Data Ringkasan Presensi (mirip chart admin, tapi untuk user)
-const userAttendanceSummary = [
-  { name: 'Present', value: 25 },
-  { name: 'Permit', value: 2 },
-  { name: 'Leave', value: 1 },
-  { name: 'Sick', value: 0 },
-];
-const ATTENDANCE_COLORS = ['#34D399', '#FBBF24', '#EF4444', '#60A5FA']; // Green, Amber, Red, Blue
+    const handleOptionClick = (option: string) => {
+        setSelectedOption(option)
+        setDropdownOpen(false)
+    }
 
-// Data Ringkasan Cuti (Annual Leave)
-const userLeaveSummary = {
-  totalQuota: 12,
-  taken: 4,
-  remaining: 8,
-};
+    const handleMonthSelect = (month: string) => {
+        setSelectedMonth(month)
+        setMonthDropdownOpen(false)
+    }
 
-// Data Jam Kerja Harian (mirip bar chart admin)
-const userWorkHoursData = [
-  { date: 'Sen, 20 Mei', 'Jam Kerja': 8 },
-  { date: 'Sel, 21 Mei', 'Jam Kerja': 7.5 },
-  { date: 'Rab, 22 Mei', 'Jam Kerja': 8 },
-  { date: 'Kam, 23 Mei', 'Jam Kerja': 0 }, // Cuti/libur
-  { date: 'Jum, 24 Mei', 'Jam Kerja': 8 },
-  { date: 'Sab, 25 Mei', 'Jam Kerja': 4 },
-  { date: 'Min, 26 Mei', 'Jam Kerja': 0 },
-];
+    const handleLeaveRangeSelect = (range: string) => {
+        setSelectedLeaveRange(range)
+        setLeaveDropdownOpen(false)
+    }
 
-// Opsi bulan untuk dropdown (generasi sama dengan admin)
-const generateMonthOptions = () => {
-  const options = [];
-  const current = new Date();
-  for (let i = 0; i < 6; i++) {
-    const date = new Date(current.getFullYear(), current.getMonth() - i, 1);
-    options.push(date.toLocaleString('id', { month: 'long', year: 'numeric' }));
-  }
-  return options;
-};
-const monthOptions = generateMonthOptions();
+    const handleWeekSelect = (week: string) => {
+        setSelectedWeek(week)
+        setWeekDropdownOpen(false)
+    }
 
-// Opsi rentang waktu untuk Cuti
-const leaveTimeRangeOptions = ['Bulan Ini', '3 Bulan Terakhir', '6 Bulan Terakhir', 'Tahun Ini'];
+    const pieData = [
+        { name: 'Present', value: 40, color: '#247046' },
+        { name: 'Permit', value: 20, color: '#2D8DFE' },
+        { name: 'Leave', value: 15, color: '#C01005' },
+        { name: 'Sick', value: 25, color: '#FEAA00' },
+    ]
 
+    // Data bar graph sesuai permintaan
+    const barData = [
+        { date: 'March 20', hours: 8 },
+        { date: 'March 21', hours: 2 },
+        { date: 'March 22', hours: 4 },
+        { date: 'March 23', hours: 3 },
+        { date: 'March 24', hours: 6.72 }, // 6hr 43m = 6 + 43/60 = 6.7167 approx
+        { date: 'March 25', hours: 1.5 },
+        { date: 'March 26', hours: 4 },
+    ]
 
-// --- Komponen Pembantu ---
-
-// Komponen Kartu (mirip Card dari Shadcn UI)
-const Card = ({ title, value, icon }: { title: string; value: string; icon?: React.ReactNode }) => {
-  return (
-    <div className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-6 flex flex-col items-start gap-2">
-      {icon && (
-        <div className="absolute top-4 left-4 text-3xl opacity-80">
-          {icon}
-        </div>
-      )}
-      <p className="text-sm font-medium text-muted-foreground pl-10">{title}</p>
-      <h3 className="text-2xl font-bold text-foreground pl-10">{value}</h3>
-      <p className="text-xs text-muted-foreground pt-2">
-        Update: {new Date().toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-      </p>
-    </div>
-  );
-};
-
-// Komponen Dropdown (mirip Select dari Shadcn UI, tanpa @radix-ui/react-icons)
-const CustomDropdown = ({ options, selected, setSelected }: { options: string[], selected: string, setSelected: (value: string) => void }) => {
-  return (
-    <div className="relative">
-      <select
-        value={selected}
-        onChange={(e) => setSelected(e.target.value)}
-        className="appearance-none bg-background border border-input h-9 px-3 py-1 text-sm rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-ring focus:border-primary pr-8"
-      >
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-      {/* Menggunakan ikon panah SVG sederhana */}
-      <svg
-        className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          fillRule="evenodd"
-          d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.29a.75.75 0 01.02-1.06z"
-          clipRule="evenodd"
-        />
-      </svg>
-    </div>
-  );
-};
-
-// --- Komponen Utama Dashboard User ---
-export default function UserDashboardPage() {
-  const [selectedMonth, setSelectedMonth] = useState(monthOptions[0]);
-  const [selectedLeavePeriod, setSelectedLeavePeriod] = useState(leaveTimeRangeOptions[0]);
-
-  return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 bg-gray-50 min-h-screen rounded-lg">
-      <h1 className="text-3xl font-bold text-gray-900">Dashboard Anda</h1>
-
-      {/* Header Cards: Work Hours, On Time, Late, Absent */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {userDataCards.map((card) => (
-          <Card key={card.id} title={card.title} value={card.value} icon={card.icon} />
-        ))}
-      </div>
-
-      {/* Attendance Summary & Leave Summary */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Attendance Summary (Pie Chart) */}
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Ringkasan Kehadiran</h2>
-            <CustomDropdown options={monthOptions} selected={selectedMonth} setSelected={setSelectedMonth} />
-          </div>
-          <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8 h-64">
-            <ResponsiveContainer width="50%" height="100%">
-              <PieChart>
-                <Pie
-                  data={userAttendanceSummary}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  labelLine={false}
-                  label={({ name, percent }: {name: string, percent: number}) => `${name} ${(percent * 100).toFixed(0)}%`}
-                >
-                  {userAttendanceSummary.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={ATTENDANCE_COLORS[index % ATTENDANCE_COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value: number, name: string) => [`${value} Hari`, name]} />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="flex flex-col space-y-2">
-              {userAttendanceSummary.map((entry, index) => (
-                <div key={entry.name} className="flex items-center text-sm text-gray-700">
-                  <span className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: ATTENDANCE_COLORS[index % ATTENDANCE_COLORS.length] }}></span>
-                  {entry.name}: {entry.value} Hari
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Leave Summary */}
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Ringkasan Cuti</h2>
-            <CustomDropdown options={leaveTimeRangeOptions} selected={selectedLeavePeriod} setSelected={setSelectedLeavePeriod} />
-          </div>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-              <span className="font-semibold text-gray-700">Total Kuota Cuti Tahunan</span>
-              <span className="text-xl font-bold text-gray-900">{userLeaveSummary.totalQuota} Hari</span>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-blue-50 p-4 rounded-md">
-                <p className="text-sm text-blue-700">Sudah Diambil</p>
-                <p className="text-2xl font-bold text-blue-800 mt-1">{userLeaveSummary.taken} Hari</p>
-                {/* <a href="#" className="text-xs text-blue-600 hover:underline"></a> */}
-              </div>
-              <div className="bg-green-50 p-4 rounded-md">
-                <p className="text-sm text-green-700">Sisa Kuota</p>
-                <p className="text-2xl font-bold text-green-800 mt-1">{userLeaveSummary.remaining} Hari</p>
-                {/* <a href="#" className="text-xs text-green-600 hover:underline">Ajukan Cuti &rarr;</a> */}
-              </div>
-            </div>
-            <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors" onClick={() => useRouter().push('/user/checkclock')}>
-              Ajukan Cuti Baru
+    return (
+        // <DashboardLayout>
+        <div className="p-6">
+            {/* Dropdown Rentang Tanggal */}
+            <div className="relative inline-block mb-6">
+            <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="w-[250px] h-[50px] bg-white text-black rounded shadow-md flex items-center justify-between px-4 text-sm font-semibold"
+            >
+                {selectedOption}
+                <span className="ml-2">&#x25BC;</span>
             </button>
-          </div>
-        </div>
-      </div>
 
-      {/* Your Work Hours (Bar Chart) */}
-      <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-semibold text-gray-900">Jam Kerja Anda</h2>
-          <CustomDropdown options={['Minggu Ini', 'Bulan Ini']} selected={'Minggu Ini'} setSelected={() => {}} />
+            {dropdownOpen && (
+                <ul className="absolute z-10 mt-1 w-full bg-white text-black border border-gray-300 rounded shadow-md">
+                {dateOptions.map((option, index) => (
+                    <li
+                    key={index}
+                    onClick={() => handleOptionClick(option)}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                    >
+                    {option}
+                    </li>
+                ))}
+                </ul>
+            )}
+            </div>
+
+            {/* 4 Kotak Statistik */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
+            <StatBox title="Work Hours" value="120h 54m" indicatorColor="#1D395E" />
+            <StatBox title="On Time" value="20" indicatorColor="#2D8DFE" />
+            <StatBox title="Late" value="5" indicatorColor="#FEAA00" />
+            <StatBox title="Absent" value="10" indicatorColor="#C01005" />
+            </div>
+
+            {/* Dua Kotak Besar */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+            {/* Kotak Kiri - Attendance Summary */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-700">Attendance Summary</h3>
+                <div className="relative">
+                    <button
+                    onClick={() => setMonthDropdownOpen(!monthDropdownOpen)}
+                    className="px-4 py-2 bg-white border border-gray-300 rounded text-sm shadow-sm text-black"
+                    >
+                    {selectedMonth} <span className="ml-2">&#x25BC;</span>
+                    </button>
+                    {monthDropdownOpen && (
+                    <ul className="absolute right-0 mt-1 w-[150px] bg-white border border-gray-300 rounded shadow-md z-10">
+                        {monthOptions.map((month, index) => (
+                        <li
+                            key={index}
+                            onClick={() => handleMonthSelect(month)}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-black"
+                        >
+                            {month}
+                        </li>
+                        ))}
+                    </ul>
+                    )}
+                </div>
+                </div>
+
+                {/* Pie Chart */}
+                <div className="w-full h-64">
+                <ResponsiveContainer>
+                    <PieChart>
+                    <Pie
+                        data={pieData}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={100}
+                        labelLine={false}
+                    >
+                        <Label
+                        value="Total Presensi"
+                        position="center"
+                        style={{ fill: '#000', fontWeight: 'bold', fontSize: '14px' }}
+                        />
+                        {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                    </Pie>
+                    </PieChart>
+                </ResponsiveContainer>
+                </div>
+
+                {/* Legend */}
+                <div className="flex justify-around mt-4">
+                {pieData.map((entry, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                    <div
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: entry.color }}
+                    ></div>
+                    <span className="text-sm text-gray-700">{entry.name}</span>
+                    </div>
+                ))}
+                </div>
+            </div>
+
+            {/* Kotak Kanan - Leave Summary */}
+            <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
+                <div className="flex justify-between items-center">
+                <h3 className="text-lg font-bold text-black">Leave Summary</h3>
+                <div className="relative">
+                    <button
+                    onClick={() => setLeaveDropdownOpen(!leaveDropdownOpen)}
+                    className="px-4 py-2 bg-gray-100 border border-gray-300 rounded text-sm shadow-sm text-black"
+                    >
+                    {selectedLeaveRange} <span className="ml-2">&#x25BC;</span>
+                    </button>
+                    {leaveDropdownOpen && (
+                    <ul className="absolute right-0 mt-1 w-[150px] bg-white border border-gray-300 rounded shadow-md z-10">
+                        {dateOptions.map((range, index) => (
+                        <li
+                            key={index}
+                            onClick={() => handleLeaveRangeSelect(range)}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-black"
+                        >
+                            {range}
+                        </li>
+                        ))}
+                    </ul>
+                    )}
+                </div>
+                </div>
+
+                {/* Total Quota */}
+                <div className="border border-gray-500 rounded-md p-4">
+                <div className="text-base text-black font mb-1 flex items-center">
+                    <span className="inline-block w-4 h-4 bg-gray-500 rounded-full mr-2"></span>
+                    Total Quota Annual Leave
+                </div>
+                <div className="text-3xl font-extrabold text-black mb-3 text-center">12 Days</div>
+                <div className="text-sm text-gray-500 border-t pt-2 cursor-pointer">Request Leave →</div>
+                </div>
+
+                {/* Taken & Remaining */}
+                <div className="grid grid-cols-2 gap-4">
+                {/* Kotak Taken */}
+                <div className="border border-gray-500 rounded-md p-4">
+                    <div className="text-sm text-black font mb-1 flex items-center">
+                    <span className="inline-block w-3 h-3 bg-gray-500 rounded-full mr-2"></span>
+                    Taken
+                    </div>
+                    <div className="text-xl font-extrabold text-black mb-3">4 Days</div>
+                    <div className="text-sm text-gray-500 border-t pt-2 cursor-pointer">See Details →</div>
+                </div>
+
+                {/* Kotak Remaining */}
+                <div className="border border-gray-500 rounded-md p-4">
+                    <div className="text-sm text-black font mb-1 flex items-center">
+                    <span className="inline-block w-3 h-3 bg-gray-500 rounded-full mr-2"></span>
+                    Remaining
+                    </div>
+                    <div className="text-xl font-extrabold text-black mb-3">8 Days</div>
+                    <div className="text-sm text-gray-500 border-t pt-2 cursor-pointer">Request Leaves →</div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            {/* Tambahan Kotak Besar di bawah */}
+            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-black">Your Work Hours</h3>
+                <div className="relative">
+                <button
+                    onClick={() => setWeekDropdownOpen(!weekDropdownOpen)}
+                    className="px-4 py-2 bg-white border border-gray-300 rounded text-sm shadow-sm text-black flex items-center"
+                >
+                    {selectedWeek} <span className="ml-2">&#x25BC;</span>
+                </button>
+                {weekDropdownOpen && (
+                    <ul className="absolute right-0 mt-1 w-[150px] bg-white border border-gray-300 rounded shadow-md z-10">
+                    {weekOptions.map((week, index) => (
+                        <li
+                        key={index}
+                        onClick={() => handleWeekSelect(week)}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-black"
+                        >
+                        {week}
+                        </li>
+                    ))}
+                    </ul>
+                )}
+                </div>
+            </div>
+
+            {/* Work Hours Display */}
+            <div className="text-4xl font-extrabold text-black mb-6">120h 54m</div>
+
+            {/* Bar Graph */}
+            <div className="w-full h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <YAxis
+                    label={{ value: 'Hours', angle: -90, position: 'insideLeft', dy: 50 }}
+                    domain={[0, 10]}
+                    tickCount={6}
+                />
+                <XAxis dataKey="date" />
+                <Tooltip />
+                <Bar
+                    dataKey="hours"
+                    fill="#CBD5E1"
+                    activeBar={{ fill: "#1D395E" }}
+                    radius={[5, 5, 0, 0]}
+                />
+                </BarChart>
+                </ResponsiveContainer>
+            </div>
+            </div>
         </div>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={userWorkHoursData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-            <XAxis dataKey="date" axisLine={false} tickLine={false} className="text-xs" />
-            <YAxis unit=" jam" axisLine={false} tickLine={false} className="text-xs" />
-            <Tooltip cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }} formatter={(value: number) => [`${value} jam`, 'Jam Kerja']} />
-            <Bar dataKey="Jam Kerja" fill="#1C3D5A" radius={[4, 4, 0, 0]} barSize={20} />
-          </BarChart>
-        </ResponsiveContainer>
+        // </DashboardLayout>
+    )
+    }
+
+function StatBox({
+  title,
+  value,
+  indicatorColor,
+}: {
+  title: string
+  value: string | number
+  indicatorColor: string
+}) {
+  return (
+    <div className="bg-white rounded-lg shadow-md p-6 flex flex-col justify-center text-black border border-gray-200">
+      <div className="flex items-center mb-2">
+        <span
+          className="w-10 h-10 rounded-sm mr-2"
+          style={{ backgroundColor: indicatorColor }}
+        ></span>
+        <span className="text-sm font-semibold">{title}</span>
       </div>
+      <div className="text-3xl font-extrabold">{value}</div>
     </div>
-  );
+  )
 }
+
