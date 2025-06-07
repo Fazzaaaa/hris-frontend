@@ -8,7 +8,7 @@ export default function SuccessReset() {
   const router = useRouter();
 
   const handleGoToLogin = () => {
-    router.push("/admin/dashboard");
+    router.push("/user/dashboard");
   };
 
   return (
@@ -46,7 +46,7 @@ export default function SuccessReset() {
 
           {/* Back to log in via Link juga jika mau */}
           <Link
-            href="/auth/loginAdmin"
+            href="/auth/loginEmployee"
             className="flex items-center justify-center text-sm text-blue-600 hover:underline"
           >
             <span className="mr-2">&#8592;</span> Back to log in

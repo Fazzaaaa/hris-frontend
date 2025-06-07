@@ -38,7 +38,7 @@ export default function SignUpPage() {
     }
 
     setFormError("");
-    router.push("/auth/adminDashboard");
+    router.push("/admin/dashboard");
   };
 
   return (

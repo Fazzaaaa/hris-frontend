@@ -24,7 +24,7 @@ export default function SignInPage() {
     }
 
     setFormError("");
-    router.push("/dashboard/adminDashboard");
+    router.push("/admin/dashboard");
   };
 
   return (

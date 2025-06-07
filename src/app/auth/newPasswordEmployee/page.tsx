@@ -21,7 +21,7 @@ export default function SetNewPassword() {
       return;
     }
 
-    router.push("/auth/successReset");
+    router.push("/auth/successResetEmployee");
   };
 
   return (
@@ -70,7 +70,7 @@ export default function SetNewPassword() {
           </button>
 
           <Link
-            href="/auth/loginAdmin"
+            href="/auth/loginEmployee"
             className="flex items-center justify-center text-sm text-blue-600 hover:underline"
           >
             <span className="mr-2">&#8592;</span> Back to log in

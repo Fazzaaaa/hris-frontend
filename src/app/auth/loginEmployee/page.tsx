@@ -15,7 +15,7 @@ export default function SignInEmployee() {
   };
 
   const handleSignIn = () => {
-    router.push("/dashboard/employeeDashboard");
+    router.push("/user/dashboard");
   };
 
   return (
@@ -92,7 +92,7 @@ export default function SignInEmployee() {
             />
             Remember me
           </label>
-          <Link href="/auth/forgotPassword" className="text-sm text-blue-600 hover:underline">
+          <Link href="/auth/forgotPasswordEmployee" className="text-sm text-blue-600 hover:underline">
             Forgot Password?
           </Link>
         </div>

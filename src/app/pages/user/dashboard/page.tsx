@@ -1,6 +1,6 @@
     'use client'
 
-    import DashboardLayout from '@/app/components/layout'
+    // import DashboardLayout from '@/app/components/layout'
     import React, { useState } from 'react'
     import {
     PieChart,
@@ -71,7 +71,7 @@
     ]
 
     return (
-        <DashboardLayout>
+        // <DashboardLayout>
         <div className="p-6">
             {/* Dropdown Rentang Tanggal */}
             <div className="relative inline-block mb-6">
@@ -291,7 +291,7 @@
             </div>
             </div>
         </div>
-        </DashboardLayout>
+        // </DashboardLayout>
     )
     }
 

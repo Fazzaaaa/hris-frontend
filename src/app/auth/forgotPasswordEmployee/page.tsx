@@ -11,7 +11,7 @@ export default function ForgotPassword() {
 
   const handleResetPassword = () => {
     if (email) {
-      router.push(`/auth/checkEmail?email=${encodeURIComponent(email)}`);
+      router.push(`/auth/checkEmailEmployee?email=${encodeURIComponent(email)}`);
     } else {
       alert("Please enter a valid email address!");
     }
@@ -49,7 +49,7 @@ export default function ForgotPassword() {
           </button>
 
           <Link
-            href="/auth/loginAdmin"
+            href="/auth/loginEmployee"
             className="flex items-center justify-center text-sm text-blue-600 hover:underline"
           >
             <span className="mr-2">&#8592;</span> Back to log in
