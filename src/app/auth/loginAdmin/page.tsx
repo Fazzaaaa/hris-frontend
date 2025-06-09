@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation"; 
+import { loginAdmin } from "@/app/services/auth";
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,14 +18,20 @@ export default function SignInPage() {
     setShowPassword(!showPassword);
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!email || !password) {
       setFormError("Please fill in both fields.");
       return;
     }
+    try {
+      const result = await loginAdmin(email, password);
+      console.log("Login berhasil:", result); // result = nilai yg dikembalikan
 
-    setFormError("");
-    router.push("/admin/dashboard");
+      // Redirect ke dashboard
+      router.push("/dashboard/adminDashboard");
+    } catch (error: any) {
+      setFormError(error.message || "Login failed");
+    }
   };
 
   return (
