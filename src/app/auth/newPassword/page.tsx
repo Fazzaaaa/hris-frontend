@@ -79,8 +79,8 @@ export default function SetNewPassword() {
       </div>
 
       {/* Kanan (Gambar) */}
-      <div className="w-1/2 bg-[#9cd0f1] flex items-center justify-center">
-        <Image src="/images/logo-hris-1.png" alt="Logo" width={400} height={400} />
+      <div className="w-1/2 bg-[#7CA5BF] flex items-center justify-center">
+        <Image src="/image/logo1.png" alt="Logo" width={400} height={400} />
       </div>
     </div>
   );

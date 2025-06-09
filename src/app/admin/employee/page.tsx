@@ -802,7 +802,7 @@ export default function EmployeeTable() {
             <TableHead className="cursor-pointer" onClick={() => handleSort("status")}>
               Status {renderSortIndicator("status")}
             </TableHead>
-            <TableHead>Action</TableHead>
+            <TableHead>Action</TableHead> 
           </TableRow>
         </TableHeader>
         <TableBody>

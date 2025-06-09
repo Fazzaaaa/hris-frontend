@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState(""); 
-  const router = useRouter(); 
+  const [email, setEmail] = useState("");
+  const router = useRouter();
 
   const handleResetPassword = () => {
     if (email) {
-      router.push("/auth/checkEmail"); 
+      router.push(`/auth/checkEmail?email=${encodeURIComponent(email)}`);
     } else {
-      alert("Please enter a valid email address!"); 
+      alert("Please enter a valid email address!");
     }
   };
 
@@ -37,12 +37,12 @@ export default function ForgotPassword() {
               className="w-full p-2 border border-gray-300 rounded text-black"
               placeholder="Enter your email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} 
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           <button
-            onClick={handleResetPassword} 
+            onClick={handleResetPassword}
             className="w-full bg-gray-500 text-white p-2 rounded mb-6"
           >
             Reset Password
@@ -58,8 +58,8 @@ export default function ForgotPassword() {
       </div>
 
       {/* Kanan (Biru - Logo) */}
-      <div className="w-1/2 bg-[#9cd0f1] flex items-center justify-center">
-        <Image src="/images/logo-hris-1.png" alt="Logo" width={400} height={400} />
+      <div className="w-1/2 bg-[#7CA5BF] flex items-center justify-center">
+        <Image src="/image/logo1.png" alt="Logo" width={400} height={400} />
       </div>
     </div>
   );

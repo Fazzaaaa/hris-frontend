@@ -24,7 +24,7 @@ export default function SignInPage() {
     }
 
     setFormError("");
-    router.push("/dashboard/adminDashboard");
+    router.push("/admin/dashboard");
   };
 
   return (
@@ -121,7 +121,7 @@ export default function SignInPage() {
             href="/auth/loginEmployee"
             className="block border border-black rounded p-2 text-center cursor-pointer hover:bg-gray-100 transition text-black"
           >
-            Sign in with ID Employee
+            Sign in with Company Username
           </Link>
         </div>
 

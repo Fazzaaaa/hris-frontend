@@ -1,144 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MdClose } from "react-icons/md";
 
-// Types
-type PackageType = {
-  title: string;
-  description: string;
-  features: string[];
-};
-
-type SeatType = {
-  name: string;
-  price: number | string;
-  description: string;
-};
-
-// Dummy Data
-const packageData: PackageType[] = [
-  {
-    title: "Nama Paket",
-    description: "Best for growing business",
-    features: [
-      "Feature list",
-      "GPS-based attendance validation",
-      "Employee data management",
-      "Leave & time-off request",
-      "Overtime management (government regulation)",
-      "Fixed work schedule management",
-      "Automatic tax calculation",
-    ],
-  },
-  {
-    title: "Premium",
-    description: "Best for growing business",
-    features: [
-      "All Standard features ✔",
-      "Click-in & Clock-out attendance settings ✔",
-      "Fingerprint integration ✔",
-      "Employee document management ✔",
-      "Sick leave & time-off settings ✔",
-      "Shift management ✔",
-      "Comprehensive reports ✔",
-      "Overtime management (gov & custom rules) ✔",
-    ],
-  },
-  {
-    title: "Ultra",
-    description: "Best for growing business",
-    features: [
-      "All Premium features",
-      "Face Recognition",
-      "Automated check-out attendance",
-      "Employee turnover dashboard",
-      "Custom dashboard for statistics & analysis",
-    ],
-  },
-];
-
-const seatData: SeatType[] = [
-  {
-    name: "STANDARD",
-    price: 15000,
-    description: "This package for 1 until 50 employee",
-  },
-  {
-    name: "PREMIUM",
-    price: 15000,
-    description: "This package for 1 until 50 employee",
-  },
-  {
-    name: "ULTRA",
-    price: 15000,
-    description: "This package for 1 until 50 employee",
-  },
-  {
-    name: "Nama Paket",
-    price: "Harga",
-    description: "Deskripsi jumlah karyawan yang bisa menggunakan",
-  },
-  {
-    name: "Nama Paket",
-    price: "Harga",
-    description: "Deskripsi jumlah karyawan yang bisa menggunakan",
-  },
-  {
-    name: "Nama Paket",
-    price: "Harga",
-    description: "Deskripsi jumlah karyawan yang bisa menggunakan",
-  },
-];
-
-// Components
-const PackageCard = ({ title, description, features, onSelect }: PackageType & { onSelect: () => void }) => (
-  <div
-    className="bg-gray-100 rounded-2xl p-6 shadow text-left transition-all transform hover:scale-105 hover:bg-gray-300 hover:shadow-xl border border-gray-300 group"
-    data-testid={`package-card-${title}`}
-  >
-    <div className="relative">
-      <h2 className="text-xl font-semibold text-gray-400 group-hover:text-white group-hover:bg-gray-800 group-hover:rounded-md transition-all px-3 py-1 inline-block">
-        {title}
-      </h2>
-    </div>
-    <p className="text-sm text-gray-500 mb-3">{description}</p>
-    <ul className="text-sm text-gray-600 space-y-2">
-      {features.map((feature, index) => (
-        <li key={index}>{feature}</li>
-      ))}
-    </ul>
-    <button
-      onClick={onSelect}
-      className="mt-4 w-full bg-gray-400 text-white py-2 rounded-md hover:bg-gray-500"
-    >
-      Select Package →
-    </button>
-  </div>
-);
-
-const SeatCard = ({ name, price, description, onSelect }: SeatType & { onSelect: () => void }) => (
-  <div
-    className="bg-gray-100 rounded-xl p-6 shadow text-left flex flex-col justify-between"
-    data-testid={`seat-card-${name}`}
-  >
-    <h2 className="text-base font-semibold text-gray-400">{name}</h2>
-    <p className="text-2xl font-bold text-gray-400 mt-2">
-      Rp {typeof price === "number" ? price.toLocaleString("id-ID") : price}
-      <span className="text-sm font-normal text-gray-400"> /user/month</span>
-    </p>
-    <p className="text-sm mt-2 text-gray-500">{description}</p>
-    <button
-      onClick={onSelect}
-      className="mt-4 w-full bg-gray-400 text-white py-2 rounded-md hover:bg-gray-500"
-    >
-      Upgrade Package →
-    </button>
-  </div>
-);
-
-export default function PricingPage() {
+export default function PricingSection() {
   const [activeTab, setActiveTab] = useState<"Package" | "Seat">("Package");
   const router = useRouter();
 
@@ -151,64 +16,145 @@ export default function PricingPage() {
         : "bg-gray-300 text-black hover:bg-gray-400"
     }`;
 
+  const packageData = [
+    {
+      title: "Basic",
+      description: "Perfect for small teams",
+      features: [
+        "Feature list",
+        "GPS-based attendance validation",
+        "Employee data management",
+        "Leave & time-off request",
+        "Overtime management \n(government regulation)",
+        "Fixed work schedule management",
+        "Automatic tax calculation",
+      ],
+    },
+    {
+      title: "Premium",
+      description: "Best for growing businesses",
+      features: [
+        "All Standard features",
+        "Click-in & Clock-out attendance settings",
+        "Fingerprint integration",
+        "Employee document management",
+        "Sick leave & time-off settings",
+        "Shift management",
+        "Comprehensive reports",
+        "Overtime management \n(goverment & custom regulations)",
+      ],
+    },
+    {
+      title: "Ultra",
+      description: "For advanced HR operations",
+      features: [
+        "All Premium features",
+        "Face Recognition",
+        "Automated check-out attendance",
+        "Employee turnover dashboard",
+        "Custom dashboard for statistic & analytics",
+      ],
+    },
+  ];
+
+  const seatData = [
+    {
+      name: "STANDARD",
+      price: 15000,
+      description: "For teams with 1–50 employees",
+    },
+    {
+      name: "STANDARD PLUS",
+      price: 20000,
+      description: "For teams with 51–75 employees",
+    },
+    {
+      name: "PREMIUM",
+      price: 25000,
+      description: "For teams with 76–100 employees",
+    },
+    {
+      name: "PREMIUM PLUS",
+      price: 30000,
+      description: "For teams with 101–150 employees",
+    },
+    {
+      name: "ULTRA",
+      price: 40000,
+      description: "For teams with 151–200 employees",
+    },
+    {
+      name: "ULTRA ENTERPRISE",
+      price: 50000,
+      description: "For enterprises above 200 employees",
+    },
+  ];
+
   return (
-    <div className="min-h-screen text-center px-4 py-10" style={{ backgroundColor: "#7CA5BF" }}>
-      <button
-        onClick={() => router.push("/admin/dashboard")}
-        className="absolute top-4 right-4 text-black hover:text-white bg-gray-200 hover:bg-gray-600 p-1 rounded-full transition"
-        aria-label="Close"
-      >
-        <MdClose size={24} />
-      </button>
-      <h1 className="text-5xl font-bold text-black mb-4">HRIS Pricing Plans</h1>
-      <p className="mt-2 text-m text-gray-100 max-w-md mx-auto mb-4">
-        Choose the plan that suits your business! This HRIS offers both
-        subscription and pay-as-you-go payment options, available in the
-        following packages.
-      </p>
+    <section id="pricing" className="py-16 px-6 md:px-12 bg-[#D7E3EB] text-center">
+      <div className="container mx-auto">
+        <h1 className="text-black text-5xl font-extrabold mb-4">HRIS Pricing Plans</h1>
+        <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
+          Choose the plan that suits your business! This HRIS offers
+          <br />both subscription and pay-as-you-go payment options,
+          <br />available in following packages.
+        </p>
 
-      <div className="mt-4 inline-flex">
-        <button
-          onClick={() => setActiveTab("Package")}
-          className={`${tabButton("Package")} rounded-l-lg`}
-        >
-          Package
-        </button>
-        <button
-          onClick={() => setActiveTab("Seat")}
-          className={`${tabButton("Seat")} rounded-r-lg`}
-        >
-          Seat
-        </button>
+        {/* Tabs */}
+        <div className="inline-flex mb-10">
+          <button onClick={() => setActiveTab("Package")} className={`${tabButton("Package")} rounded-l-lg`}>
+            Package
+          </button>
+          <button onClick={() => setActiveTab("Seat")} className={`${tabButton("Seat")} rounded-r-lg`}>
+            Seat
+          </button>
+        </div>
+
+        {/* Package Cards */}
+        {activeTab === "Package" && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {packageData.map((pkg, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow hover:shadow-xl transition-all text-left">
+                <h3 className="text-xl font-bold text-gray-700 mb-2">{pkg.title}</h3>
+                <p className="text-sm text-gray-500 mb-3">{pkg.description}</p>
+                <ul className="text-sm text-gray-600 space-y-1 mb-4">
+                  {pkg.features.map((feature, i) => (
+                    <li key={i}>• {feature}</li>
+                  ))}
+                </ul>
+                <button
+                  onClick={goToCheckout}
+                  className="w-full bg-[#1F3F60] text-white py-2 rounded hover:bg-[#2D8DFE]"
+                >
+                  Select Package →
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Seat Cards */}
+        {activeTab === "Seat" && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {seatData.map((seat, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow hover:shadow-xl transition-all text-left">
+                <h3 className="text-lg font-semibold text-gray-700">{seat.name}</h3>
+                <p className="text-xl font-bold text-gray-800 mt-2">
+                  Rp {seat.price.toLocaleString("id-ID")}{" "}
+                  <span className="text-sm font-normal text-gray-500">/user/month</span>
+                </p>
+                <p className="text-sm text-gray-500 mt-2">{seat.description}</p>
+                <button
+                  onClick={goToCheckout}
+                  className="mt-4 w-full bg-[#1F3F60] text-white py-2 rounded hover:bg-[#2D8DFE]"
+                >
+                  Upgrade Package →
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-
-      {activeTab === "Package" && (
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {packageData.map((pkg, index) => (
-            <PackageCard
-              key={index}
-              title={pkg.title}
-              description={pkg.description}
-              features={pkg.features}
-              onSelect={goToCheckout}
-            />
-          ))}
-        </div>
-      )}
-
-      {activeTab === "Seat" && (
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {seatData.map((pkg, index) => (
-            <SeatCard
-              key={index}
-              name={pkg.name}
-              price={pkg.price}
-              description={pkg.description}
-              onSelect={goToCheckout}
-            />
-          ))}
-        </div>
-      )}
-    </div>
+    </section>
   );
 }
