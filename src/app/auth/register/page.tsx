@@ -7,14 +7,16 @@ import Link from "next/link";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export default function SignUpPage() {
+  const [company, setCompany] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agree, setAgree] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [bank, setBank] = useState("");
+  const [number, setNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const [formError, setFormError] = useState("");
   const router = useRouter();
 
@@ -27,7 +29,7 @@ export default function SignUpPage() {
   };
 
   const handleSignUp = () => {
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+    if (!company || !email || !password || !confirmPassword) {
       setFormError("All fields are required.");
       return;
     }
@@ -45,55 +47,51 @@ export default function SignUpPage() {
     <div className="flex min-h-screen">
       {/* Kiri */}
       <div className="w-1/2 bg-[#9cd0f1] flex items-center justify-center">
-        <Image src="/images/logo-hris-1.png" alt="Logo" width={500} height={500} />
+        <Image
+          src="/images/logo-hris-1.png"
+          alt="Logo"
+          width={500}
+          height={500}
+        />
       </div>
 
       {/* Kanan */}
       <div className="w-1/2 bg-white p-8">
         <div className="flex justify-between items-center mb-8">
-          <Image src="/images/logo-hris-1.png" alt="Logo" width={120} height={40} />
-          <Link href="/auth/loginAdmin" className="text-blue-600 text-sm font-medium underline hover:opacity-80">
+          <Image
+            src="/images/logo-hris-1.png"
+            alt="Logo"
+            width={120}
+            height={40}
+          />
+          <Link
+            href="/auth/loginAdmin"
+            className="text-blue-600 text-sm font-medium underline hover:opacity-80"
+          >
             Login here!
           </Link>
         </div>
 
-        <h1 className="text-2xl font-bold mb-4 text-black">Sign Up</h1>
+        <h1 className="text-2xl font-bold mb-4 text-black">Register</h1>
         <p className="text-sm mb-6 text-black">
           Create your account and streamline your employee management.
         </p>
 
         {/* Error Message */}
         {formError && <div className="text-red-600 mb-4">{formError}</div>}
-
-        <div className="flex gap-4 mb-4">
-          <div className="w-1/2">
-            <label htmlFor="firstName" className="block text-sm text-black">
-              First Name
-            </label>
-            <input
-              id="firstName"
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded mt-2 text-black"
-              placeholder="Enter your first name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="w-1/2">
-            <label htmlFor="lastName" className="block text-sm text-black">
-              Last Name
-            </label>
-            <input
-              id="lastName"
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded mt-2 text-black"
-              placeholder="Enter your last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
+        <div className="mb-4">
+          <label htmlFor="company" className="block text-sm text-black">
+            Company Name
+          </label>
+          <input
+            id="company"
+            type="company"
+            className="w-full p-2 border border-gray-300 rounded mt-2 text-black"
+            placeholder="Enter your company name"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+          />
         </div>
-
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm text-black">
             Email
@@ -125,7 +123,11 @@ export default function SignUpPage() {
               onClick={togglePasswordVisibility}
               className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-black"
             >
-              {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+              {showPassword ? (
+                <AiFillEyeInvisible size={20} />
+              ) : (
+                <AiFillEye size={20} />
+              )}
             </div>
           </div>
         </div>
@@ -147,8 +149,49 @@ export default function SignUpPage() {
               onClick={toggleConfirmPasswordVisibility}
               className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-black"
             >
-              {showConfirmPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+              {showConfirmPassword ? (
+                <AiFillEyeInvisible size={20} />
+              ) : (
+                <AiFillEye size={20} />
+              )}
             </div>
+          </div>
+        </div>
+        <div className="flex gap-4 mb-4">
+          <div className="w-1/2">
+            <label htmlFor="bank" className="block text-sm text-black">
+              Bank
+            </label>
+            <select
+              id="bank"
+              className="w-full p-2 border border-gray-300 rounded mt-2 text-black"
+              value={bank}
+              onChange={(e) => setBank(e.target.value)}
+            >
+              <option value="">Choose your bank</option>
+              <option value="BCA">BCA</option>
+              <option value="BRI">BRI</option>
+              <option value="BNI">BNI</option>
+              <option value="MANDIRI">MANDIRI</option>
+            </select>
+          </div>
+          <div className="w-1/2">
+            <label htmlFor="number" className="block text-sm text-black">
+              Account Number
+            </label>
+            <input
+              id="number"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              className="w-full p-2 border border-gray-300 rounded mt-2 text-black"
+              placeholder="Enter your account number"
+              value={number}
+              onChange={(e) => {
+                const numericValue = e.target.value.replace(/\D/g, ""); // remove non-numeric characters
+                setNumber(numericValue);
+              }}
+            />
           </div>
         </div>
 
@@ -161,11 +204,16 @@ export default function SignUpPage() {
               onChange={() => setAgree(!agree)}
               className="appearance-none h-5 w-5 rounded-full border-2 border-gray-400 checked:bg-blue-500 checked:border-blue-500 transition-all duration-200 mr-2"
             />
-            <span className="text-sm text-black">I agree with the terms of use of HRIS</span>
+            <span className="text-sm text-black">
+              I agree with the terms of use of HRIS
+            </span>
           </label>
         </div>
 
-        <button onClick={handleSignUp} className="w-full bg-gray-500 text-white p-2 rounded mb-4">
+        <button
+          onClick={handleSignUp}
+          className="w-full bg-gray-500 text-white p-2 rounded mb-4"
+        >
           SIGN UP
         </button>
 
@@ -173,10 +221,12 @@ export default function SignUpPage() {
           Sign up with Google
         </button>
 
-
         <div className="text-center mt-6">
           <span className="text-black">Already have an account? </span>
-          <Link href="/auth/loginAdmin" className="text-blue-600 font-medium hover:underline">
+          <Link
+            href="/auth/loginAdmin"
+            className="text-blue-600 font-medium hover:underline"
+          >
             Sign in here
           </Link>
         </div>

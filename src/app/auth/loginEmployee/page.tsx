@@ -34,7 +34,7 @@ export default function SignInEmployee() {
           </Link>
         </div>
 
-        <h1 className="text-2xl font-bold mb-4 text-black">Sign in with ID Employee</h1>
+        <h1 className="text-2xl font-bold mb-4 text-black">Sign in with Employee Username</h1>
         <p className="text-sm mb-6 text-black">
           Welcome back to HRIS cmlabs! Manage everything with ease.
         </p>
@@ -51,7 +51,7 @@ export default function SignInEmployee() {
           />
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label htmlFor="employeeID" className="block text-sm text-black">
             ID Employee
           </label>
@@ -61,7 +61,7 @@ export default function SignInEmployee() {
             className="w-full p-2 border border-gray-300 rounded mt-2 text-black"
             placeholder="Enter your ID Employee"
           />
-        </div>
+        </div> */}
         
         <div className="mb-4">
           <label htmlFor="password" className="block text-sm text-black">

@@ -52,7 +52,7 @@ const adminMenuItems = [
     path: "/admin/letter-management",
     label: "Letter Management",
   },
-  { icon: <MdPayments />, path: "/pricing", label: "Payment Plan" },
+  { icon: <MdPayments />, path: "/admin/pricing", label: "Payment Plan" },
 ];
 
 const userMenuItems = [
