@@ -20,6 +20,7 @@ import {
 import {
   Sheet,SheetContent,SheetHeader,SheetTitle,SheetDescription,
 } from "@/components/ui/sheet";
+import { deleteEmployee } from "@/lib/utils/employeeActions";
 
 import {
   AlertDialog,
@@ -48,14 +49,14 @@ interface Employee {
   dateBirth: Date | null;
   role: string;
   branch: string;
-  grade: string;
+  // grade: string;
   contractType: string;
   bank: string;
   accountNumber: string;
   accountName: string;
   spType: string;
   idEmployee: string;
-  status: boolean;
+  //status: boolean;
 }
 // Contoh data karyawan (mock data)
 const mockEmployees: Employee[] = [
@@ -66,152 +67,42 @@ const mockEmployees: Employee[] = [
     lastName: "Smith",
     mobileNumber: "08111111111",
     nik: "3201011234567890",
-    gender: "Female",
+    gender: "Perempuan",
     lastEducation: "S1",
     placeBirth: "Bandung",
     dateBirth: new Date("1990-05-15"),
     role: "CEO",
     branch: "Bekasi",
-    grade: "A1",
+    // grade: "A1",
     contractType: "fixed",
     bank: "BCA",
     accountNumber: "1234567890",
     accountName: "Juanita Smith",
     spType: "SP1",
     idEmployee: "EMP001",
-    status: true,
+    //status: true,
   },
   {
     no: 2,
-    avatar: "/avatars/2.png",
-    firstName: "Budi",
-    lastName: "Santoso",
-    mobileNumber: "08122222222",
-    nik: "3202029876543210",
-    gender: "Male",
-    lastEducation: "S2",
-    placeBirth: "Jakarta",
-    dateBirth: new Date("1985-11-20"),
-    role: "Manager",
-    branch: "Jakarta",
-    grade: "A2",
-    contractType: "fixed",
-    bank: "Mandiri",
-    accountNumber: "9876543210",
-    accountName: "Budi Santoso",
-    spType: "SP2",
-    status: false,
-    idEmployee: "EMP002",
-  },
-  {
-    no: 3,
-    avatar: "/avatars/3.png",
-    firstName: "Siti",
-    lastName: "Aminah",
-    mobileNumber: "08133333333",
-    nik: "3203031122334455",
-    gender: "Female",
-    lastEducation: "SMA",
-    placeBirth: "Surabaya",
-    dateBirth: new Date("1993-01-01"),
-    role: "Staff",
-    branch: "Surabaya",
-    grade: "B1",
-    contractType: "contract",
-    bank: "BRI",
-    accountNumber: "1122334455",
-    accountName: "Siti Aminah",
-    spType: "SP0",
-    status: true,
-    idEmployee: "EMP003",
-  },
-  {
-    no: 4,
-    avatar: "/avatars/4.png",
-    firstName: "Agus",
-    lastName: "Wibowo",
-    mobileNumber: "08144444444",
-    nik: "3204045566778899",
-    gender: "Male",
-    lastEducation: "D3",
-    placeBirth: "Bandung",
-    dateBirth: new Date("1991-07-25"),
-    role: "Staff",
-    branch: "Bekasi",
-    grade: "B2",
-    contractType: "fixed",
-    bank: "BNI",
-    accountNumber: "5566778899",
-    accountName: "Agus Wibowo",
-    spType: "SP1",
-    status: true,
-    idEmployee: "EMP004",
-  },
-  {
-    no: 5,
-    avatar: "/avatars/5.png",
-    firstName: "Dewi",
-    lastName: "Kusuma",
-    mobileNumber: "08155555555",
-    nik: "3205059988776655",
-    gender: "Female",
+    avatar: "/avatars/1.png",
+    firstName: "Broni",
+    lastName: "Smith",
+    mobileNumber: "08111111111",
+    nik: "3201011234567890",
+    gender: "Laki Laki",
     lastEducation: "S1",
-    placeBirth: "Semarang",
-    dateBirth: new Date("1988-03-10"),
-    role: "Manager",
-    branch: "Jakarta",
-    grade: "A2",
+    placeBirth: "Bandung",
+    dateBirth: new Date("1990-05-15"),
+    role: "CEO",
+    branch: "Bekasi",
+    // grade: "A1",
     contractType: "fixed",
     bank: "BCA",
-    accountNumber: "9988776655",
-    accountName: "Dewi Kusuma",
-    spType: "SP2",
-    status: true,
-    idEmployee: "EMP005",
-  },
-  {
-    no: 6,
-    avatar: "/avatars/6.png",
-    firstName: "Rizky",
-    lastName: "Pratama",
-    mobileNumber: "08166666666",
-    nik: "3206061231231231",
-    gender: "Male",
-    lastEducation: "S1",
-    placeBirth: "Yogyakarta",
-    dateBirth: new Date("1995-09-01"),
-    role: "Staff",
-    branch: "Surabaya",
-    grade: "B1",
-    contractType: "contract",
-    bank: "BNI",
-    accountNumber: "1231231231",
-    accountName: "Rizky Pratama",
-    spType: "SP0",
-    status: true,
-    idEmployee: "EMP006",
-  },
-  {
-    no: 7,
-    avatar: "/avatars/7.png",
-    firstName: "Fitri",
-    lastName: "Handayani",
-    mobileNumber: "08177777777",
-    nik: "3207074564564564",
-    gender: "Female",
-    lastEducation: "D3",
-    placeBirth: "Medan",
-    dateBirth: new Date("1992-02-28"),
-    role: "Supervisor",
-    branch: "Medan",
-    grade: "B1",
-    contractType: "fixed",
-    bank: "BRI",
-    accountNumber: "4564564564",
-    accountName: "Fitri Handayani",
+    accountNumber: "1234567890",
+    accountName: "Juanita Smith",
     spType: "SP1",
-    status: false,
-    idEmployee: "EMP007",
+    idEmployee: "EMP002",
+    //status: true,
   },
 ];
 
@@ -242,7 +133,7 @@ export default function EmployeeTable() {
     router.push("/admin/employee/add-Employee");
   };
   const goToEditEmployeePage = () => {
-    router.push("/admin/employee/Edit-Employee");
+    router.push("/admin/employee/edit-employee?id=${employee.idEmployee}");
   };
 
   const goToEmployeeDetails = (employeeNo: number) => {
@@ -272,8 +163,21 @@ export default function EmployeeTable() {
 
   // Efek samping untuk memperbarui statistik ketika `employees` berubah
   useEffect(() => {
+  const stored = localStorage.getItem("employees");
+    if (stored) {
+      setEmployees(JSON.parse(stored));
+    } else {
+      localStorage.setItem("employees", JSON.stringify(mockEmployees));
+      setEmployees(mockEmployees);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("employees", JSON.stringify(employees));
+    
     setTotalEmployee(employees.length);
     setFullTimeEmployee(employees.filter(emp => emp.contractType === 'fixed').length);
+
     // Logika untuk totalNewHire bisa lebih kompleks, tergantung definisi "new hire"
   }, [employees]);
 
@@ -396,8 +300,8 @@ export default function EmployeeTable() {
 
               if (key === 'no') {
                 (employee as any)[key] = parseInt(value as string, 10);
-              } else if (key === 'status') {
-                (employee as any)[key] = (value as string).toLowerCase() === 'true';
+              // } else if (key === 'status') {
+              //   (employee as any)[key] = (value as string).toLowerCase() === 'true';
               } else if (key === 'dateBirth') {
                 (employee as any)[key] = value ? new Date(value as string) : null;
               }
@@ -419,14 +323,14 @@ export default function EmployeeTable() {
               dateBirth: employee.dateBirth || null,
               role: employee.role || '',
               branch: employee.branch || '',
-              grade: employee.grade || '',
+              // grade: employee.grade || '',
               contractType: employee.contractType || '',
               bank: employee.bank || '',
               accountNumber: employee.accountNumber || '',
               accountName: employee.accountName || '',
               spType: employee.spType || '',
               idEmployee: employee.idEmployee || `EMP${employee.no || Date.now()}`,
-              status: employee.status !== undefined ? employee.status : true,
+              // status: employee.status !== undefined ? employee.status : true,
             } as Employee;
           });
           if (importedData.length === 0 || !importedData.every(item => 'no' in item && 'firstName' in item && 'status' in item)) {
@@ -799,10 +703,10 @@ export default function EmployeeTable() {
             <TableHead className="cursor-pointer" onClick={() => handleSort("role")}>
               Role {renderSortIndicator("role")}
             </TableHead>
-            <TableHead className="cursor-pointer" onClick={() => handleSort("status")}>
+            {/* <TableHead className="cursor-pointer" onClick={() => handleSort("status")}>
               Status {renderSortIndicator("status")}
-            </TableHead>
-            <TableHead>Action</TableHead> 
+            </TableHead> */}
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -821,19 +725,19 @@ export default function EmployeeTable() {
               <TableCell>{employee.mobileNumber}</TableCell>
               <TableCell>{employee.branch}</TableCell>
               <TableCell>{employee.role}</TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <Switch
                   checked={employee.status}
                   onCheckedChange={(newStatus) => handleStatusChange(employee.no, newStatus)}
                   className="data-[state=checked]:bg-[#2d8eff]"
                 />
-              </TableCell>
+              </TableCell> */}
               <TableCell className="flex space-x-2">
                 <Button
                   variant="default"
                   size="icon"
                   className="rounded-md bg-[#257047]"
-                  onClick={() => console.log("Edit", employee.firstName)}
+                  onClick={() => router.push(`/admin/employee/edit-employee/${employee.idEmployee}`)}
                 >
                   <svg
                     className="h-4 w-4 text-white"
@@ -877,27 +781,49 @@ export default function EmployeeTable() {
                     ></path>
                   </svg>
                 </Button>
-                <Button
-                  variant="default"
-                  size="icon"
-                  className="rounded-md bg-[#c11106]"
-                  onClick={() => console.log("Delete", employee.firstName)}
-                >
-                  <svg
-                    className="h-4 w-4 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    ></path>
-                  </svg>
-                </Button>
+                <AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button
+      variant="default"
+      size="icon"
+      className="rounded-md bg-[#c11106]"
+    >
+      <svg
+        className="h-4 w-4 text-white"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+        ></path>
+      </svg>
+    </Button>
+    </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Karyawan?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Data karyawan <strong>{employee.firstName}</strong> akan dihapus secara permanen dan tidak bisa dikembalikan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                const updated = deleteEmployee(employee.idEmployee);
+                setEmployees(updated);
+              }}
+            >
+              Hapus
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
               </TableCell>
             </TableRow>
           ))}
@@ -995,10 +921,10 @@ export default function EmployeeTable() {
                     <p className="font-medium text-gray-500">Cabang</p>
                     <p className="text-gray-900">{selectedEmployee.branch}</p>
                   </div>
-                  <div>
+                  {/* <div>
                     <p className="font-medium text-gray-500">Grade</p>
                     <p className="text-gray-900">{selectedEmployee.grade}</p>
-                  </div>
+                  </div> */}
                   <div>
                     <p className="font-medium text-gray-500">Tipe Kontrak</p>
                     <p className="text-gray-900">{selectedEmployee.contractType}</p>
@@ -1006,13 +932,13 @@ export default function EmployeeTable() {
                   <div>
                     <p className="font-medium text-gray-500">Tipe SP</p>
                     <p className="text-gray-900">{selectedEmployee.spType}</p>
-                  </div>
-                  <div>
+                  </div> 
+                  {/* <div>
                     <p className="font-medium text-gray-500">Status</p>
                     <p className={`font-semibold ${selectedEmployee.status ? 'text-green-600' : 'text-red-600'}`}>
                       {selectedEmployee.status ? 'Aktif' : 'Tidak Aktif'}
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
