@@ -47,7 +47,6 @@ export default function AddEmployeeForm({
     dateBirth: null as Date | null,
     role: "",
     branch: "",
-    grade: "",
     contractType: "fixed",
     bank: "",
     accountNumber: "",
@@ -55,6 +54,7 @@ export default function AddEmployeeForm({
     spType: "",
     idEmployee: "",
     password: "",
+    ShiftType: "",
   });
 
   useEffect(() => {
@@ -192,7 +192,13 @@ export default function AddEmployeeForm({
               id="firstName"
               placeholder="Enter the first name"
               value={formData.firstName ?? ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value;
+                // Hanya huruf dan spasi
+                if (/^[a-zA-Z\s]*$/.test(value)) {
+                  setFormData({ ...formData, firstName: value });
+                }
+              }}
               required
             />
           </div>
@@ -202,7 +208,13 @@ export default function AddEmployeeForm({
               id="lastName"
               placeholder="Enter the last name"
               value={formData.lastName ?? ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value;
+                // Hanya huruf dan spasi
+                if (/^[a-zA-Z\s]*$/.test(value)) {
+                  setFormData({ ...formData, lastName: value });
+                }
+              }}
               required
             />
           </div>
@@ -214,10 +226,21 @@ export default function AddEmployeeForm({
             <Label htmlFor="mobileNumber">Mobile Number</Label>
             <Input
               id="mobileNumber"
-              placeholder="Enter the Mobile Number"
+              placeholder="Enter your Mobile Number"
               value={formData.mobileNumber ?? ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+                if (value.length <= 13) {
+                  handleChange({
+                    ...e,
+                    target: { ...e.target, id: "mobileNumber", value },
+                  });
+                }
+              }}
               type="tel"
+              pattern="[0-9]{10,13}"
+              minLength={10}
+              maxLength={13}
               required
             />
           </div>
@@ -225,23 +248,33 @@ export default function AddEmployeeForm({
             <Label htmlFor="nik">NIK</Label>
             <Input
               id="nik"
-              placeholder="Enter the NIK"
+              placeholder="Enter your NIK (16 digits)"
               value={formData.nik ?? ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+                if (value.length <= 16) {
+                  handleChange({
+                    ...e,
+                    target: { ...e.target, id: "nik", value },
+                  });
+                }
+              }}
+              pattern="[0-9]{16}"
+              minLength={16}
+              maxLength={16}
               required
             />
           </div>
         </div>
-
         {/* Gender & Last Education */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+          <div className="w-full">
             <Label htmlFor="gender">Gender</Label>
             <Select
               onValueChange={(value) => handleSelectChange("gender", value)}
               value={formData.gender}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="-Choose Gender-" />
               </SelectTrigger>
               <SelectContent>
@@ -250,7 +283,8 @@ export default function AddEmployeeForm({
               </SelectContent>
             </Select>
           </div>
-          <div>
+
+          <div className="w-full">
             <Label htmlFor="lastEducation">Last Education</Label>
             <Select
               onValueChange={(value) =>
@@ -258,7 +292,7 @@ export default function AddEmployeeForm({
               }
               value={formData.lastEducation}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="-Choose Last Education-" />
               </SelectTrigger>
               <SelectContent>
@@ -283,7 +317,14 @@ export default function AddEmployeeForm({
               id="placeBirth"
               placeholder="Enter place of birth"
               value={formData.placeBirth ?? ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // Only letters and spaces
+                handleChange({
+                  ...e,
+                  target: { ...e.target, id: "placeBirth", value },
+                });
+              }}
+              pattern="[a-zA-Z\s]+"
               required
             />
           </div>
@@ -323,7 +364,14 @@ export default function AddEmployeeForm({
               id="role"
               placeholder="Enter your Role"
               value={formData.role ?? ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // Only letters and spaces
+                handleChange({
+                  ...e,
+                  target: { ...e.target, id: "role", value },
+                });
+              }}
+              pattern="[a-zA-Z\s]+"
               required
             />
           </div>
@@ -333,7 +381,14 @@ export default function AddEmployeeForm({
               id="branch"
               placeholder="Enter the branch"
               value={formData.branch ?? ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, ""); // Letters, numbers, and spaces
+                handleChange({
+                  ...e,
+                  target: { ...e.target, id: "branch", value },
+                });
+              }}
+              pattern="[a-zA-Z0-9\s]+"
               required
             />
           </div>
@@ -363,32 +418,39 @@ export default function AddEmployeeForm({
                 <Label htmlFor="r3">Kontrak</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="past" id="r3" />
+                <RadioGroupItem value="intern" id="r4" />
                 <Label htmlFor="r4">Magang</Label>
               </div>
             </RadioGroup>
           </div>
-          <div>
-            <Label htmlFor="grade">Grade</Label>
-            <Input
-              id="grade"
-              placeholder="Enter your grade"
-              value={formData.grade ?? ""}
-              onChange={handleChange}
-              required
-            />
+
+          <div className="w-full">
+            <Label htmlFor="ShiftType">Shift Type</Label>
+            <Select
+              onValueChange={(value) => handleSelectChange("ShiftType", value)}
+              value={formData.ShiftType}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="-Choose Shift-" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ShiftType1">Shift 1</SelectItem>
+                <SelectItem value="ShiftType2">Shift 2</SelectItem>
+                <SelectItem value="ShiftType3">Shift 3</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
         {/* Bank & Account Number */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+          <div className="w-full">
             <Label htmlFor="bank">Bank</Label>
             <Select
               onValueChange={(value) => handleSelectChange("bank", value)}
               value={formData.bank}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="-choose your bank-" />
               </SelectTrigger>
               <SelectContent>
@@ -400,14 +462,22 @@ export default function AddEmployeeForm({
               </SelectContent>
             </Select>
           </div>
+
           <div>
             <Label htmlFor="accountNumber">Account Number</Label>
             <Input
               id="accountNumber"
               placeholder="Enter your account number"
               value={formData.accountNumber ?? ""}
-              onChange={handleChange}
-              type="number"
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+                if (value.length <= 20) {
+                  handleChange({
+                    ...e,
+                    target: { ...e.target, id: "accountNumber", value },
+                  });
+                }
+              }}
               required
             />
           </div>
@@ -421,17 +491,24 @@ export default function AddEmployeeForm({
               id="accountName"
               placeholder="Enter the account name"
               value={formData.accountName ?? ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // Only letters and spaces
+                handleChange({
+                  ...e,
+                  target: { ...e.target, id: "accountName", value },
+                });
+              }}
+              pattern="[a-zA-Z\s]+"
               required
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label htmlFor="spType">SP Type</Label>
             <Select
               onValueChange={(value) => handleSelectChange("spType", value)}
               value={formData.spType}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="-choose SP-" />
               </SelectTrigger>
               <SelectContent>
@@ -440,31 +517,6 @@ export default function AddEmployeeForm({
                 <SelectItem value="SP3">SP3</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-        </div>
-
-        {/* ID Employee & Password */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="idEmployee">ID Employee</Label>
-            <Input
-              id="idEmployee"
-              placeholder="Enter your ID Employee"
-              value={formData.idEmployee ?? ""}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={formData.password ?? ""}
-              onChange={handleChange}
-              required
-            />
           </div>
         </div>
 

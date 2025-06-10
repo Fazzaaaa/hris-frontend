@@ -596,16 +596,6 @@ const Checkclock = () => {
               </div>
 
               {/* Approval */}
-              <div className="space-y-1 text-sm">
-                <div>
-                  <strong>Approval:</strong>{" "}
-                  {selectedEntry.approval === true
-                    ? "Approved"
-                    : selectedEntry.approval === false
-                    ? "Rejected"
-                    : "Pending"}
-                </div>
-              </div>
             </div>
           )}
         </SheetContent>

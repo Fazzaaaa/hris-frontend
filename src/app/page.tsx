@@ -219,7 +219,19 @@ export default function Dashboard() {
             height={100}
           />
         </div>
-        <div>
+        <div className="flex justify-start items-center gap-x-4">
+          <motion.button
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 8px 20px rgba(45, 141, 254, 0.4)",
+            }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-[#2D8DFE] text-white py-2 px-7 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 font-semibold"
+            onClick={() => router.push("/auth/loginAdmin")}
+          >
+            Login
+          </motion.button>
+
           <motion.button
             whileHover={{
               scale: 1.05,
