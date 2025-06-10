@@ -28,7 +28,7 @@ export default function SignInPage() {
       console.log("Login berhasil:", result); // result = nilai yg dikembalikan
 
       // Redirect ke dashboard
-      router.push("/dashboard/adminDashboard");
+      router.push("/admin/dashboard");
     } catch (error: any) {
       setFormError(error.message || "Login failed");
     }

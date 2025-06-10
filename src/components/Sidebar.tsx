@@ -12,6 +12,7 @@ import {
   MdDrafts,
   MdSupportAgent,
 } from "react-icons/md";
+import { logout } from "@/app/services/auth";
 
 type SidebarIconProps = {
   icon: ReactNode;
@@ -154,9 +155,14 @@ export default function Sidebar() {
             <p className="mb-6 text-sm">Are you sure you want to logout?</p>
             <div className="flex justify-center gap-4">
               <button
-                onClick={() => {
-                  setShowLogoutModal(false);
-                  router.push("/");
+                onClick={async () => {
+                  try {
+                    await logout(); // panggil fungsi logout
+                    setShowLogoutModal(false);
+                    router.push("/"); // redirect ke halaman utama
+                  } catch (err) {
+                    console.error("Logout gagal:", err);
+                  }
                 }}
                 className="bg-[#1e3a5f] text-white px-5 py-2 rounded-md font-semibold"
               >
