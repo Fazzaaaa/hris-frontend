@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { registerAdmin } from "@/app/services/auth";
 
 export default function SignUpPage() {
   const [company, setCompany] = useState("");
@@ -28,8 +29,8 @@ export default function SignUpPage() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSignUp = () => {
-    if (!company || !email || !password || !confirmPassword) {
+  const handleSignUp = async () => {
+    if (!company || !email || !bank || !number || !password || !confirmPassword) {
       setFormError("All fields are required.");
       return;
     }
@@ -39,9 +40,27 @@ export default function SignUpPage() {
       return;
     }
 
-    setFormError("");
-    router.push("/admin/dashboard");
-  };
+    try {
+      setFormError(""); // Bersihkan error sebelumnya
+
+      const payload = {
+        company_name: company,
+        email,
+        bank_name: bank,
+        bank_number: number,
+        password,
+        password_confirmation: confirmPassword, // Laravel butuh ini untuk validasi konfirmasi
+      };
+
+      const response = await registerAdmin(payload);
+      console.log("Register berhasil:", response);
+
+      router.push("/admin/dashboard");
+    } catch (error: any) {
+      console.error("Register gagal:", error);
+      setFormError(error.response?.data?.message || "Registration failed");
+    }
+  }
 
   return (
     <div className="flex min-h-screen">
