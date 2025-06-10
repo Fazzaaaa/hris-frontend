@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<"Package" | "Seat">("Package");
   const router = useRouter();
 
-  const goToCheckout = () => router.push("/pages/checkout");
+  const goToCheckout = () => router.push("/pricing/checkout");
 
   const tabButton = (tab: "Package" | "Seat") =>
     `px-5 py-2 text-base font-semibold rounded-lg transition-all duration-300 ${

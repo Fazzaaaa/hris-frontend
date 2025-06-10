@@ -1,8 +1,8 @@
-// // app/admin/employee/add-employee/page.tsx
-// "use client";
+// app/admin/employee/add-employee/page.tsx
+"use client";
 
-// // import AddEmployeeForm from "@/components/AddEmployeeForm";
+import AddEmployeeForm from "@/components/AddEmployeeForm";
 
-// export default function AddEmployeePage() {
-//   return <AddEmployeeForm mode="add" />;
-// }
+export default function AddEmployeePage() {
+  return <AddEmployeeForm mode="add" />;
+}

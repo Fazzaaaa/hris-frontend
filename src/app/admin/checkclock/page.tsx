@@ -1,9 +1,13 @@
 "use client";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePageTitle } from "@/context/PageTitleContext";
 import { FiSearch } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa";
+import { FiCheck, FiX } from "react-icons/fi";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -15,6 +19,15 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 type CheckclockEntry = {
   image: string;
@@ -30,40 +43,114 @@ type CheckclockEntry = {
 const checkclockData: CheckclockEntry[] = [
   {
     image: "",
-    nama: "Sony Febri Hari Wibowo",
-    jabatan: "tes",
-    clockIn: "09:28 AM",
-    clockOut: "04:00 PM",
-    workHours: "10h 5m",
-    approval: null,
-    status: "",
-  },
-  {
-    image: "",
-    nama: "Anisa Rahma",
-    jabatan: "Developer",
+    nama: "Juanita",
+    jabatan: "CEO",
     clockIn: "08:00 AM",
     clockOut: "04:00 PM",
     workHours: "8h 0m",
-    approval: null,
+    approval: true,
     status: "",
   },
   {
     image: "",
-    nama: "Budi Santoso",
-    jabatan: "QA Engineer",
+    nama: "Shane",
+    jabatan: "OB",
+    clockIn: "08:20 AM",
+    clockOut: "04:00 PM",
+    workHours: "7h 40m",
+    approval: false,
+    status: "",
+  },
+  {
+    image: "",
+    nama: "Miles",
+    jabatan: "Head of HR",
     clockIn: "00:00",
     clockOut: "00:00",
     workHours: "0",
     approval: null,
     status: "",
   },
+  {
+    image: "",
+    nama: "Flores",
+    jabatan: "Manager",
+    clockIn: "08:05 AM",
+    clockOut: "04:05 PM",
+    workHours: "8h 0m",
+    approval: true,
+    status: "",
+  },
+  {
+    image: "",
+    nama: "Henry",
+    jabatan: "CPO",
+    clockIn: "08:18 AM",
+    clockOut: "04:10 PM",
+    workHours: "7h 52m",
+    approval: true,
+    status: "",
+  },
+  {
+    image: "",
+    nama: "Marvin",
+    jabatan: "OB",
+    clockIn: "08:00 AM",
+    clockOut: "04:00 PM",
+    workHours: "8h 0m",
+    approval: false,
+    status: "",
+  },
+  {
+    image: "",
+    nama: "Black",
+    jabatan: "HRD",
+    clockIn: "08:25 AM",
+    clockOut: "04:15 PM",
+    workHours: "7h 50m",
+    approval: false,
+    status: "",
+  },
+  {
+    image: "",
+    nama: "Jacob Jones",
+    jabatan: "Supervisor",
+    clockIn: "00:00",
+    clockOut: "00:00",
+    workHours: "0",
+    approval: null,
+    status: "",
+  },
+  {
+    image: "",
+    nama: "Ronald Richard",
+    jabatan: "OB",
+    clockIn: "00:00",
+    clockOut: "00:00",
+    workHours: "0",
+    approval: null,
+    status: "",
+  },
+  {
+    image: "",
+    nama: "Leslie Alexander",
+    jabatan: "OB",
+    clockIn: "08:10 AM",
+    clockOut: "04:10 PM",
+    workHours: "8h 0m",
+    approval: true,
+    status: "",
+  },
 ];
 
 const Checkclock = () => {
   const { setTitle } = usePageTitle();
+
+  useEffect(() => {
+    setTitle("Checkclock");
+  }, [setTitle]);
   const router = useRouter();
-  setTitle("Checkclock");
+  // setTitle("Checkclock");
 
   const [data, setData] = useState(checkclockData);
   const [searchTerm, setSearchTerm] = useState("");
@@ -71,6 +158,11 @@ const Checkclock = () => {
   const [sortOrder, setSortOrder] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const [selectedEntry, setSelectedEntry] = useState<CheckclockEntry | null>(
+    null
+  );
+  const [showDetail, setShowDetail] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState<null | number>(null);
   const [approvalAction, setApprovalAction] = useState<"accept" | "reject">(
@@ -92,41 +184,44 @@ const Checkclock = () => {
   };
 
   const cancelApproval = () => setShowConfirm(null);
-
-  const determineStatus = (entry: (typeof checkclockData)[0]) => {
-    if (
+  const determineStatus = (entry: CheckclockEntry) => {
+    const isZeroClock =
       entry.clockIn === "00:00" &&
       entry.clockOut === "00:00" &&
-      entry.workHours === "0"
-    ) {
-      return { text: "Absent", color: "bg-blue-500 text-white" };
+      entry.workHours === "0";
+
+    if (isZeroClock) {
+      if (entry.approval === true) {
+        return { text: "Sick Leave", color: "bg-blue-600 text-white" };
+      } else if (entry.approval === false) {
+        return { text: "Absent", color: "bg-red-600 text-white" };
+      } else {
+        return { text: "Waiting Approval", color: "bg-yellow-500 text-white" };
+      }
     }
 
-    // 👇 Tambahkan kondisi default "Waiting Approval"
     if (entry.approval === null) {
       return { text: "Waiting Approval", color: "bg-yellow-500 text-white" };
     }
 
-    if (entry.approval === true) {
-      return { text: "Approved", color: "bg-green-600 text-white" };
-    }
-
-    if (entry.approval === false) {
-      return { text: "Rejected", color: "bg-red-600 text-white" };
-    }
-
-    const clockInHour = parseInt(entry.clockIn.split(":")[0], 10);
-    const clockInMin = parseInt(entry.clockIn.split(":")[1], 10);
+    // Convert clockIn to minutes
+    const [clockHour, clockMinuteRaw] = entry.clockIn.split(":");
     const isAM = entry.clockIn.toLowerCase().includes("am");
+    let hourNum = parseInt(clockHour, 10);
+    const minuteNum = parseInt(clockMinuteRaw.slice(0, 2), 10);
 
-    let totalMinutes = (clockInHour % 12) * 60 + clockInMin;
-    if (!isAM) totalMinutes += 12 * 60;
+    // Convert 12-hour to 24-hour format
+    if (hourNum === 12 && isAM) hourNum = 0;
+    if (!isAM && hourNum !== 12) hourNum += 12;
 
-    if (totalMinutes <= 480) {
+    const totalMinutes = hourNum * 60 + minuteNum;
+
+    // 08:15 AM = 495 minutes
+    if (totalMinutes < 495) {
       return { text: "On Time", color: "bg-green-500 text-white" };
+    } else {
+      return { text: "Late", color: "bg-red-500 text-white" };
     }
-
-    return { text: "Late", color: "bg-red-500 text-white" };
   };
 
   const filteredData = data
@@ -145,6 +240,11 @@ const Checkclock = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
   const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState<number | null>(
+    null
+  );
+  // const selectedEntry = selectedEntryIndex !== null ? data[selectedEntryIndex] : null;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow text-sm">
@@ -200,15 +300,16 @@ const Checkclock = () => {
           <thead className="bg-[#1E3A5F] text-white">
             <tr>
               <th className="px-4 py-2 text-left">Employee Name</th>
-              <th className="px-4 py-2 text-left">Jabatan</th>
-              <th className="px-4 py-2 text-left">Clock In</th>
-              <th className="px-4 py-2 text-left">Clock Out</th>
-              <th className="px-4 py-2 text-left">Work Hours</th>
-              <th className="px-4 py-2 text-left">Approve</th>
-              <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left">Details</th>
+              <th className="px-4 py-2 text-center">Jabatan</th>
+              <th className="px-4 py-2 text-center">Clock In</th>
+              <th className="px-4 py-2 text-center">Clock Out</th>
+              <th className="px-4 py-2 text-center">Work Hours</th>
+              <th className="px-4 py-2 text-center">Approve</th>
+              <th className="px-4 py-2 text-center">Status</th>
+              <th className="px-4 py-2 text-center">Details</th>
             </tr>
           </thead>
+
           <tbody className="divide-y">
             {currentData.length === 0 ? (
               <tr>
@@ -221,7 +322,8 @@ const Checkclock = () => {
                 const statusInfo = determineStatus(entry);
                 return (
                   <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 flex items-center gap-2">
+                    {/* Kolom Employee Name - rata kiri */}
+                    <td className="px-4 py-2 flex items-center gap-2 text-left">
                       <div
                         className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs"
                         style={{ backgroundColor: "#B93B53" }}
@@ -230,83 +332,111 @@ const Checkclock = () => {
                       </div>
                       <span>{entry.nama}</span>
                     </td>
-                    <td className="px-4 py-2">{entry.jabatan}</td>
-                    <td className="px-4 py-2">{entry.clockIn}</td>
-                    <td className="px-4 py-2">{entry.clockOut}</td>
-                    <td className="px-4 py-2">{entry.workHours}</td>
-                    <td className="px-4 py-2 space-y-1 flex flex-col">
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <button
-                            onClick={() => {
-                              setShowConfirm(index);
-                              setApprovalAction("accept");
-                            }}
-                            className="px-2 py-1 w-full text-green-600 border rounded hover:bg-green-50"
-                          >
-                            Approve
-                          </button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Approve this check-in?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Are you sure you want to approve{" "}
-                              <strong>{entry.nama}</strong>'s attendance?
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={confirmApproval}>
-                              Yes, Approve
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
 
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <button
-                            onClick={() => {
-                              setShowConfirm(index);
-                              setApprovalAction("reject");
-                            }}
-                            className="px-2 py-1 w-full text-red-600 border rounded hover:bg-red-50"
-                          >
-                            Reject
-                          </button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Reject this check-in?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Are you sure you want to reject{" "}
-                              <strong>{entry.nama}</strong>'s attendance?
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={confirmApproval}>
-                              Yes, Reject
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                    {/* Kolom lainnya - rata tengah */}
+                    <td className="px-4 py-2 text-center">{entry.jabatan}</td>
+                    <td className="px-4 py-2 text-center">{entry.clockIn}</td>
+                    <td className="px-4 py-2 text-center">{entry.clockOut}</td>
+                    <td className="px-4 py-2 text-center">{entry.workHours}</td>
+
+                    <td className="px-4 py-2 text-center">
+                      {entry.approval === null ? (
+                        <div className="flex justify-center gap-2">
+                          {/* Approve Button */}
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <button
+                                onClick={() => {
+                                  setShowConfirm(index);
+                                  setApprovalAction("accept");
+                                }}
+                                className="text-green-600 hover:text-green-700"
+                                title="Approve"
+                              >
+                                <FaCheckCircle size={20} />
+                              </button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Approve this check-in?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to approve{" "}
+                                  <strong>{entry.nama}</strong>'s attendance?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={confirmApproval}
+                                  className="bg-green-600 hover:bg-green-700 text-white"
+                                >
+                                  Yes, Approve
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+
+                          {/* Reject Button */}
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <button
+                                onClick={() => {
+                                  setShowConfirm(index);
+                                  setApprovalAction("reject");
+                                }}
+                                className="text-red-600 hover:text-red-700"
+                                title="Reject"
+                              >
+                                <FaTimesCircle size={20} />
+                              </button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Reject this check-in?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to reject{" "}
+                                  <strong>{entry.nama}</strong>'s attendance?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={confirmApproval}
+                                  className="bg-red-600 hover:bg-red-700 text-white"
+                                >
+                                  Yes, Reject
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 italic text-xs">
+                          Already processed
+                        </span>
+                      )}
                     </td>
 
-                    <td className="px-4 py-2">
+                    <td className="px-4 py-2 text-center">
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}
                       >
                         {statusInfo.text}
                       </span>
                     </td>
-                    <td className="px-4 py-2">
-                      <button className="px-2 py-1 border text-xs rounded-md hover:bg-gray-100">
+
+                    <td className="px-4 py-2 text-center">
+                      <button
+                        className="px-2 py-1 border text-xs rounded-md hover:bg-gray-100"
+                        onClick={() => {
+                          setSelectedEntry(entry);
+                          setShowDetail(true);
+                        }}
+                      >
                         View
                       </button>
                     </td>
@@ -376,35 +506,110 @@ const Checkclock = () => {
           </button>
         </div>
       </div>
+      <Sheet open={showDetail} onOpenChange={setShowDetail}>
+        <SheetContent side="right" className="w-[400px] bg-white">
+          <SheetHeader>
+            <SheetTitle className="text-2xl font-bold">
+              Attendance Detail
+            </SheetTitle>
+          </SheetHeader>
 
-      {/* Confirmation Modal */}
-      {showConfirm !== null && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div className="bg-white p-6 rounded shadow-md text-sm w-80">
-            <h3 className="font-semibold mb-2">Confirm {approvalAction}?</h3>
-            <p className="mb-4">
-              Are you sure you want to <strong>{approvalAction}</strong> this
-              entry?
-            </p>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={cancelApproval}
-                className="px-3 py-1 border rounded hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmApproval}
-                className={`px-3 py-1 rounded text-white ${
-                  approvalAction === "accept" ? "bg-green-600" : "bg-red-600"
-                }`}
-              >
-                Yes, {approvalAction}
-              </button>
+          {selectedEntry && (
+            <div className="mt-6 space-y-4 text-sm">
+              {/* Box 1: Profile */}
+              <div className="flex items-start justify-between p-4 border rounded-lg shadow-sm bg-gray-50">
+                <div className="flex gap-4 items-start">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold"
+                      style={{ backgroundColor: "#B93B53" }}
+                    >
+                      {selectedEntry.nama?.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="text-base font-semibold">
+                        {selectedEntry.nama}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {selectedEntry.jabatan}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-sm font-medium">
+                  <span
+                    className={`inline-block px-2 py-1 rounded-full text-white ${
+                      determineStatus(selectedEntry).color || "bg-gray-400"
+                    }`}
+                  >
+                    {determineStatus(selectedEntry).text}
+                  </span>
+                </div>
+              </div>
+
+              {/* Box 2: Attendance Info */}
+              <div className="p-4 border rounded-lg shadow-sm bg-gray-50 space-y-3">
+                <div className="text-base font-semibold">
+                  Attendance Information
+                </div>
+                <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <div className="text-gray-500 text-xs">Check In</div>
+                    <div>{selectedEntry.clockIn || "-"}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-xs">Check Out</div>
+                    <div>{selectedEntry.clockOut || "-"}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-xs">Work Hours</div>
+                    <div>{selectedEntry.workHours || "0h"}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Box 3: Location Info */}
+              <div className="p-4 border rounded-lg shadow-sm bg-gray-50 space-y-3">
+                <div className="text-base font-semibold">
+                  Location Information
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <div className="text-gray-500 text-xs">Location</div>
+                    <div>Kantor Pusat</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-xs">Detail Address</div>
+                    <div>Jl. Veteran No. 1, Kota Malang</div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <div className="text-gray-500 text-xs">Lat</div>
+                    <div>{(Math.random() * -90 + 90).toFixed(6)}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-xs">Long</div>
+                    <div>{(Math.random() * 180 - 90).toFixed(6)}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Approval */}
+              <div className="space-y-1 text-sm">
+                <div>
+                  <strong>Approval:</strong>{" "}
+                  {selectedEntry.approval === true
+                    ? "Approved"
+                    : selectedEntry.approval === false
+                    ? "Rejected"
+                    : "Pending"}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
