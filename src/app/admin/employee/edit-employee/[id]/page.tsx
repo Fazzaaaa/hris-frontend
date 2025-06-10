@@ -18,7 +18,7 @@ export default function EditEmployeePage() {
       const storedData = localStorage.getItem("employees");
       if (storedData) {
         const allEmployees = JSON.parse(storedData);
-        const employee = allEmployees.find((emp: any) => emp.idEmployee === id);
+        const employee = allEmployees.find((emp: any) => emp.companyUsername === id);
         if (employee) setEmployeeData(employee);
         else alert("Employee not found");
       }

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "HRIS",
   description: "-",
   icons: {
-    icon: "/vector-hris-persegi.png",
+    icon: "/vector-hris-persegi.ico",
   },
 };
 
