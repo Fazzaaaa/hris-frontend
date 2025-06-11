@@ -5,19 +5,34 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { loginEmployee } from "@/app/services/auth";
 
 export default function SignInEmployee() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const [formError, setFormError] = useState("");
+  const [password, setPassword] = useState("");
+  const [companyUsername, setCompanyUsername] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSignIn = () => {
-    router.push("/user/dashboard");
-  };
-
+  const handleSignIn = async () => {
+      if (!companyUsername || !password) {
+        setFormError("Please fill in both fields.");
+        return;
+      }
+      try {
+        const result = await loginEmployee(companyUsername, password);
+        console.log("Login berhasil:", result); // result = nilai yg dikembalikan
+  
+        // Redirect ke dashboard
+        router.push("/admin/dashboard");
+      } catch (error: any) {
+        setFormError(error.message || "Login failed");
+      }
+    }
   return (
     <div className="flex min-h-screen">
       {/* Kiri */}
@@ -48,6 +63,8 @@ export default function SignInEmployee() {
             type="text"
             className="w-full p-2 border border-gray-300 rounded mt-2 text-black"
             placeholder="Enter your Company Username"
+            value={companyUsername}
+            onChange={(e) => setCompanyUsername(e.target.value)}
           />
         </div>
 
@@ -73,6 +90,8 @@ export default function SignInEmployee() {
               type={showPassword ? "text" : "password"}
               className="w-full p-2 pr-10 border border-gray-300 rounded text-black"
               placeholder="Enter your Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <div
               onClick={togglePasswordVisibility}
@@ -82,6 +101,12 @@ export default function SignInEmployee() {
             </div>
           </div>
         </div>
+
+          {formError && (
+            <div className="text-red-500 text-sm mb-4">
+              {formError}
+            </div>
+          )}
 
         <div className="flex items-center justify-between mb-4 mt-2">
           <label htmlFor="rememberMe" className="flex items-center text-sm text-black cursor-pointer">
@@ -99,7 +124,8 @@ export default function SignInEmployee() {
 
         <button
           onClick={handleSignIn}
-          className="w-full bg-gray-500 text-white p-2 rounded mb-4"
+          className={`w-full text-white p-2 rounded mb-4 ${(!companyUsername || !password) ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-500'}`}
+          disabled={!companyUsername || !password}
         >
           SIGN IN
         </button>
