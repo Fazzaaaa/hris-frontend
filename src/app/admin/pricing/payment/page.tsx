@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 const paymentMethods = [
@@ -72,6 +73,30 @@ export default function PaymentPage() {
     nameOnCard?: string;
     agree?: string;
   }>({});
+  function generateBRIVA() {
+    const prefix = "88888";
+    const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000); // 10 digit
+    return prefix + randomNumber;
+  }
+
+  // Get payment details from URL params
+  const searchParams = useSearchParams();
+  const [totalAmount, setTotalAmount] = useState(34000); // default value
+  const [packageName, setPackageName] = useState("Premium");
+  const [numEmployees, setNumEmployees] = useState(2);
+  const [billingPeriod, setBillingPeriod] = useState("single");
+
+  useEffect(() => {
+    const total = searchParams.get("total");
+    const pkg = searchParams.get("package");
+    const employees = searchParams.get("employees");
+    const billing = searchParams.get("billing");
+
+    if (total) setTotalAmount(parseInt(total));
+    if (pkg) setPackageName(decodeURIComponent(pkg));
+    if (employees) setNumEmployees(parseInt(employees));
+    if (billing) setBillingPeriod(billing);
+  }, [searchParams]);
 
   const renderDetails = () => {
     if (!selected) {
@@ -191,7 +216,9 @@ export default function PaymentPage() {
 
           <div className="flex justify-between items-center border px-4 py-2 rounded">
             <span>Total Amount</span>
-            <span className="font-semibold">Rp. 34.000</span>
+            <span className="font-semibold">
+              Rp {totalAmount.toLocaleString()}
+            </span>
           </div>
 
           <p className="text-xs text-gray-500">
@@ -208,7 +235,8 @@ export default function PaymentPage() {
               Privacy Policy
             </a>
             , and confirm that you are at least 18 years old. The selected
-            payment method will be charged a one-time amount of Rp. 34.000.
+            payment method will be charged a one-time amount of Rp{" "}
+            {totalAmount.toLocaleString()}.
           </p>
 
           <div className="flex items-center gap-2">
@@ -307,7 +335,9 @@ export default function PaymentPage() {
 
           <div className="flex justify-between items-center border px-4 py-2 rounded">
             <span>Total Amount</span>
-            <span className="font-semibold">Rp. 34.000</span>
+            <span className="font-semibold">
+              Rp {totalAmount.toLocaleString()}
+            </span>
           </div>
 
           <p className="text-xs text-gray-500">
@@ -324,7 +354,7 @@ export default function PaymentPage() {
               Privacy Policy
             </a>
             . The selected payment method will be charged a one-time amount of
-            Rp. 34.000.
+            Rp {totalAmount.toLocaleString()}.
           </p>
 
           <div className="flex items-center gap-2">
@@ -466,7 +496,7 @@ export default function PaymentPage() {
                     Virtual Account Number
                   </p>
                   <p className="text-black font-bold tracking-wider text-lg">
-                    088888888888888888
+                    {generateBRIVA()}
                   </p>
                 </div>
                 <Image
@@ -479,7 +509,9 @@ export default function PaymentPage() {
 
               <div>
                 <p className="text-[#999999] text-sm">Total Amount</p>
-                <p className="text-black text-lg font-bold">Rp 34.000</p>
+                <p className="text-black text-lg font-bold">
+                  Rp {totalAmount.toLocaleString()}
+                </p>
               </div>
 
               <p className="text-[#999999] text-xs border-t pt-4">
