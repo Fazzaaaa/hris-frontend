@@ -793,49 +793,49 @@ export default function EmployeeTable() {
       <Table>
         <TableHeader >
           <TableRow className="bg-[#1E3A5F] hover:bg-[#1E3A5F]">
-            <TableHead
-              className="cursor-pointer text-white"
+            <TableHead 
+              className="font-semibold text-white"
               onClick={() => handleSort("no")}
             >
               No. {renderSortIndicator("no")}
             </TableHead>
-            <TableHead className="text-white" >Avatar</TableHead>
+            <TableHead className="font-semibold text-white" >Avatar</TableHead>
             <TableHead
-              className="cursor-pointer text-white"
+              className="font-semibold text-white"
               onClick={() => handleSort("firstName")}
             >
               Name {renderSortIndicator("firstName")}
             </TableHead>
             <TableHead
-              className="cursor-pointer text-white"
+              className="font-semibold text-white"
               onClick={() => handleSort("gender")}
             >
               Gender {renderSortIndicator("gender")}
             </TableHead>
             <TableHead
-              className="cursor-pointer text-white"
+              className="font-semibold text-white"
               onClick={() => handleSort("mobileNumber")}
             >
               Mobile Number {renderSortIndicator("mobileNumber")}
             </TableHead>
             <TableHead
-              className="cursor-pointer text-white"
+              className="font-semibold text-white"
               onClick={() => handleSort("branch")}
             >
               Branch {renderSortIndicator("branch")}
             </TableHead>
             <TableHead
-              className="cursor-pointer text-white"
+              className="font-semibold text-white"
               onClick={() => handleSort("role")}
             >
               Role {renderSortIndicator("role")}
             </TableHead>
-            <TableHead className="text-white">Action</TableHead>
+            <TableHead className="font-semibold text-white">Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="">
           {currentEmployeesPaginated.map((employee) => (
-            <TableRow key={employee.no}>
+            <TableRow key={employee.no} className="text-2md ">
               <TableCell>{employee.no}</TableCell>
               <TableCell>
                 <img
