@@ -382,8 +382,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
     }
 
     // Validasi account name
-    if (!/^[A-Za-z]+$/.test(formAccountName)) {
-      setBankInfoError("Nama hanya boleh berisi huruf tanpa angka atau simbol.");
+    if (!/^[A-Za-z\s]+$/.test(formAccountName)) {
+      setBankInfoError("Nama hanya boleh berisi huruf dan spasi, tanpa angka atau simbol.");
       return;
     }
 

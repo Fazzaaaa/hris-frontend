@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePageTitle } from "@/context/PageTitleContext";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiDownload, FiEye } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa";
 import { FiCheck, FiX } from "react-icons/fi";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
@@ -29,6 +29,14 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 
+type EvidenceFile = {
+  id: string;
+  name: string;
+  type: 'image' | 'pdf';
+  url: string;
+  size: string;
+};
+
 type CheckclockEntry = {
   image: string;
   nama: string;
@@ -38,6 +46,7 @@ type CheckclockEntry = {
   workHours: string;
   approval: boolean | null;
   status: string;
+  evidenceFiles?: EvidenceFile[];
 };
 
 const checkclockData: CheckclockEntry[] = [
@@ -50,6 +59,22 @@ const checkclockData: CheckclockEntry[] = [
     workHours: "8h 0m",
     approval: true,
     status: "",
+    evidenceFiles: [
+      {
+        id: "1",
+        name: "check_in_photo.jpg",
+        type: "image",
+        url: "https://picsum.photos/800/600?random=1",
+        size: "2.3 MB"
+      },
+      {
+        id: "2",
+        name: "attendance_report.pdf",
+        type: "pdf",
+        url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+        size: "1.5 MB"
+      }
+    ]
   },
   {
     image: "",
@@ -60,86 +85,22 @@ const checkclockData: CheckclockEntry[] = [
     workHours: "7h 40m",
     approval: false,
     status: "",
-  },
-  {
-    image: "",
-    nama: "Miles",
-    jabatan: "Head of HR",
-    clockIn: "00:00",
-    clockOut: "00:00",
-    workHours: "0",
-    approval: null,
-    status: "",
-  },
-  {
-    image: "",
-    nama: "Flores",
-    jabatan: "Manager",
-    clockIn: "08:05 AM",
-    clockOut: "04:05 PM",
-    workHours: "8h 0m",
-    approval: true,
-    status: "",
-  },
-  {
-    image: "",
-    nama: "Henry",
-    jabatan: "CPO",
-    clockIn: "08:18 AM",
-    clockOut: "04:10 PM",
-    workHours: "7h 52m",
-    approval: true,
-    status: "",
-  },
-  {
-    image: "",
-    nama: "Marvin",
-    jabatan: "OB",
-    clockIn: "08:00 AM",
-    clockOut: "04:00 PM",
-    workHours: "8h 0m",
-    approval: false,
-    status: "",
-  },
-  {
-    image: "",
-    nama: "Black",
-    jabatan: "HRD",
-    clockIn: "08:25 AM",
-    clockOut: "04:15 PM",
-    workHours: "7h 50m",
-    approval: false,
-    status: "",
-  },
-  {
-    image: "",
-    nama: "Jacob Jones",
-    jabatan: "Supervisor",
-    clockIn: "00:00",
-    clockOut: "00:00",
-    workHours: "0",
-    approval: null,
-    status: "",
-  },
-  {
-    image: "",
-    nama: "Ronald Richard",
-    jabatan: "OB",
-    clockIn: "00:00",
-    clockOut: "00:00",
-    workHours: "0",
-    approval: null,
-    status: "",
-  },
-  {
-    image: "",
-    nama: "Leslie Alexander",
-    jabatan: "OB",
-    clockIn: "08:10 AM",
-    clockOut: "04:10 PM",
-    workHours: "8h 0m",
-    approval: true,
-    status: "",
+    evidenceFiles: [
+      {
+        id: "3",
+        name: "late_arrival_proof.png",
+        type: "image",
+        url: "https://picsum.photos/800/600?random=2",
+        size: "1.8 MB"
+      },
+      {
+        id: "4",
+        name: "medical_certificate.pdf",
+        type: "pdf",
+        url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+        size: "0.9 MB"
+      }
+    ]
   },
 ];
 
@@ -150,7 +111,6 @@ const Checkclock = () => {
     setTitle("Checkclock");
   }, [setTitle]);
   const router = useRouter();
-  // setTitle("Checkclock");
 
   const [data, setData] = useState(checkclockData);
   const [searchTerm, setSearchTerm] = useState("");
@@ -159,15 +119,13 @@ const Checkclock = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const [selectedEntry, setSelectedEntry] = useState<CheckclockEntry | null>(
-    null
-  );
+  const [selectedEntry, setSelectedEntry] = useState<CheckclockEntry | null>(null);
   const [showDetail, setShowDetail] = useState(false);
+  const [previewFile, setPreviewFile] = useState<EvidenceFile | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState<null | number>(null);
-  const [approvalAction, setApprovalAction] = useState<"accept" | "reject">(
-    "accept"
-  );
+  const [approvalAction, setApprovalAction] = useState<"accept" | "reject">("accept");
 
   const handleApproval = (index: number, action: "accept" | "reject") => {
     setShowConfirm(index);
@@ -184,6 +142,23 @@ const Checkclock = () => {
   };
 
   const cancelApproval = () => setShowConfirm(null);
+
+  const handleDownload = (file: EvidenceFile) => {
+    // Create a temporary anchor element to trigger download
+    const link = document.createElement('a');
+    link.href = file.url;
+    link.download = file.name;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handlePreview = (file: EvidenceFile) => {
+    setPreviewFile(file);
+    setShowPreview(true);
+  };
+
   const determineStatus = (entry: CheckclockEntry) => {
     const isZeroClock =
       entry.clockIn === "00:00" &&
@@ -241,10 +216,7 @@ const Checkclock = () => {
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
   const pageCount = Math.ceil(filteredData.length / itemsPerPage);
 
-  const [selectedEntryIndex, setSelectedEntryIndex] = useState<number | null>(
-    null
-  );
-  // const selectedEntry = selectedEntryIndex !== null ? data[selectedEntryIndex] : null;
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState<number | null>(null);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow text-sm">
@@ -284,13 +256,6 @@ const Checkclock = () => {
             <option value="az">Name A-Z</option>
             <option value="za">Name Z-A</option>
           </select>
-
-          <button
-            onClick={() => router.push("/admin/checkclock/addChecklock")}
-            className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            <FaPlus /> Add Data
-          </button>
         </div>
       </div>
 
@@ -506,8 +471,10 @@ const Checkclock = () => {
           </button>
         </div>
       </div>
+
+      {/* Detail Sheet */}
       <Sheet open={showDetail} onOpenChange={setShowDetail}>
-        <SheetContent side="right" className="w-[400px] bg-white">
+        <SheetContent side="right" className="w-[400px] bg-white p-4">
           <SheetHeader>
             <SheetTitle className="text-2xl font-bold">
               Attendance Detail
@@ -595,11 +562,103 @@ const Checkclock = () => {
                 </div>
               </div>
 
-              {/* Approval */}
+              {/* Box 4: Evidence Files */}
+              {selectedEntry.evidenceFiles && selectedEntry.evidenceFiles.length > 0 && (
+                <div className="p-4 border rounded-lg shadow-sm bg-gray-50 space-y-3">
+                  <div className="text-base font-semibold">
+                    Evidence Support
+                  </div>
+                  <div className="space-y-2">
+                    {selectedEntry.evidenceFiles.map((file) => (
+                      <div key={file.id} className="flex items-center justify-between p-2 bg-white rounded border">
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className={`w-8 h-8 rounded flex items-center justify-center text-white text-xs font-medium ${ 
+                            file.type === 'image' ? 'bg-green-500' : 'bg-red-500'
+                          }`}>
+                            {file.type === 'image' ? 'IMG' : 'PDF'}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium text-gray-900 truncate">
+                              {file.name}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {file.size}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex gap-1 ml-2">
+                          <button
+                            onClick={() => handlePreview(file)}
+                            className="p-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded"
+                            title="Preview"
+                          >
+                            <FiEye size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDownload(file)}
+                            className="p-1 text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded"
+                            title="Download"
+                          >
+                            <FiDownload size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </SheetContent>
       </Sheet>
+
+      {/* Preview Modal */}
+      <AlertDialog open={showPreview} onOpenChange={setShowPreview}>
+        <AlertDialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center justify-between">
+              <span>Preview: {previewFile?.name}</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => previewFile && handleDownload(previewFile)}
+                  className="p-2 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded"
+                  title="Download"
+                >
+                  <FiDownload size={18} />
+                </button>
+              </div>
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          
+          <div className="max-h-[70vh] overflow-auto">
+            {previewFile && (
+              <div className="flex justify-center">
+                {previewFile.type === 'image' ? (
+                  <img 
+                    src={previewFile.url} 
+                    alt={previewFile.name}
+                    className="max-w-full h-auto rounded-lg shadow-lg"
+                  />
+                ) : (
+                  <div className="w-full h-96 border rounded-lg">
+                    <iframe
+                      src={previewFile.url}
+                      className="w-full h-full rounded-lg"
+                      title={previewFile.name}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowPreview(false)}>
+              Close
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
