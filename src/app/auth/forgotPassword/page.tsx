@@ -4,16 +4,25 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { sendEmail } from "@/app/services/auth";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const router = useRouter();
 
-  const handleResetPassword = () => {
-    if (email) {
-      router.push(`/auth/checkEmail?email=${encodeURIComponent(email)}`);
-    } else {
+  const handleResetPassword = async () => {
+    if (!email) {
       alert("Please enter a valid email address!");
+      return;
+    }
+
+    try {
+      const result = await sendEmail(email);
+      console.log("Email terkirim:", result);
+      router.push("/auth/checkEmail");
+    } catch (error) {
+      console.error("Gagal mengirim email:", error);
+      alert("Gagal mengirim email reset. Silakan coba lagi.");
     }
   };
 
@@ -24,7 +33,7 @@ export default function ForgotPassword() {
         <div className="max-w-lg w-full">
           <h1 className="text-2xl font-bold text-black mb-4">Forgot Password</h1>
           <p className="text-sm text-black mb-6 leading-relaxed">
-            No worries! Enter your email address below, and we’ll <br /> send you a link to reset your password.
+            No worries! Enter your email address below, and well <br /> send you a link to reset your password.
           </p>
 
           <div className="mb-4 text-left">
@@ -59,7 +68,7 @@ export default function ForgotPassword() {
 
       {/* Kanan (Biru - Logo) */}
       <div className="w-1/2 bg-[#7CA5BF] flex items-center justify-center">
-        <Image src="/image/logo1.png" alt="Logo" width={400} height={400} />
+        <Image src="/images/logo-hris-1.png" alt="Logo" width={400} height={400} />
       </div>
     </div>
   );

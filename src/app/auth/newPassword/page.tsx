@@ -1,16 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { resetPassword } from "@/app/services/auth";
 
 export default function SetNewPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const handleSetPassword = () => {
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
+
+  const handleSetPassword = async () => {
     if (!password || !confirmPassword) {
       alert("Please fill in both fields!");
       return;
@@ -21,7 +26,26 @@ export default function SetNewPassword() {
       return;
     }
 
-    router.push("/auth/successReset");
+    if (!token || !email) {
+      alert("Invalid or expired reset link.");
+      return;
+    }
+
+    // ✅ Di sinilah variabel `data` didefinisikan dengan benar
+    const data = {
+      email,
+      token,
+      password,
+      password_confirmation: confirmPassword,
+    };
+
+    try {
+      await resetPassword(data);
+      router.push("/auth/successReset");
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      alert("Failed to reset password. Please try again.");
+    }
   };
 
   return (

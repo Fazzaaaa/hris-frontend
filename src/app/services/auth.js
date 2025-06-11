@@ -10,15 +10,23 @@ export async function loginEmployee(email, password) {
 }
 
 export async function getUser() {
-  const response = await api.get('api/auth/me');
+  const response = await api.get('/api/auth/me');
   return response.data;
 }
 
 export async function logout() {
-  return api.post('auth/logout');
+  return api.post('/auth/logout');
 }
 
 export async function registerAdmin(data) {
   await api.get('/sanctum/csrf-cookie');
   return api.post('/auth/register', data);                                    
+}
+
+export async function sendEmail(email) {
+  return api.post('/api/auth/send-email', {email});
+}
+
+export async function resetPassword(data) {
+  return api.post('/api/auth/reset-password', data);
 }

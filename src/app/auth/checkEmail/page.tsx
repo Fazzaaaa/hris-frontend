@@ -3,14 +3,45 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { sendEmail } from "@/app/services/auth";
+import { useState } from "react";
 
 export default function CheckEmail() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
+  const [isResending, setIsResending] = useState(false);
+  const [resendStatus, setResendStatus] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
 
-  const handleResendEmail = () => {
-    alert("Resending email...");
+  const handleResendEmail = async () => {
+    if (!email) {
+      alert("Email address not found");
+      return;
+    }
+
+    try {
+      setIsResending(true);
+      setResendStatus(null);
+      
+      // Kirim ulang email menggunakan service yang sudah ada
+      const result = await sendEmail(email);
+      
+      setResendStatus({
+        success: true,
+        message: "Reset link has been resent successfully"
+      });
+    } catch (error) {
+      console.error("Failed to resend email:", error);
+      setResendStatus({
+        success: false,
+        message: "Failed to resend email. Please try again."
+      });
+    } finally {
+      setIsResending(false);
+    }
   };
 
   const handleOpenGmail = () => {
@@ -51,10 +82,19 @@ export default function CheckEmail() {
             <span
               onClick={handleResendEmail}
               className="text-blue-600 cursor-pointer hover:underline"
+              style={{ pointerEvents: isResending ? 'none' : 'auto' }}
             >
-              Click here to resend!
+              {isResending ? "Sending..." : "Click here to resend!"}
             </span>
           </p>
+
+          {resendStatus && (
+            <p className={`text-sm mb-4 ${
+              resendStatus.success ? "text-green-600" : "text-red-600"
+            }`}>
+              {resendStatus.message}
+            </p>
+          )}
 
           <Link
             href="/auth/loginAdmin"
