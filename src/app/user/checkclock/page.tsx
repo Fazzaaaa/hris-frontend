@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePageTitle } from "@/context/PageTitleContext";
+import { FaPlus } from "react-icons/fa";
+
 import {
   Table,
   TableBody,
@@ -342,6 +344,12 @@ export default function CheckclockPage() {
               </option>
             ))}
           </select>
+          <button
+            onClick={() => router.push("/user/checkclock/addCheckClock")}
+            className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            <FaPlus /> Add Data
+          </button>
         </div>
       </div>
 
