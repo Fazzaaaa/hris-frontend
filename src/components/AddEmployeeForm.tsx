@@ -140,50 +140,6 @@ export default function AddEmployeeForm({
         {mode === "add" ? "Add New Employee" : "Edit Employee"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-6 outline-1 p-6">
-        {/* Upload Avatar */}
-        <div className="flex items-center space-x-4">
-          <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
-            {formData.avatar ? (
-              <img
-                src={formData.avatar}
-                alt="Avatar Preview"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <svg
-                className="w-12 h-12 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                ></path>
-              </svg>
-            )}
-          </div>
-          {/* <--- TAMBAH INPUT FILE TERSEMBUNYI */}
-          <input
-            type="file"
-            ref={fileInputRef} // Ikat ref ke input ini
-            onChange={handleFileChange}
-            className="hidden" // Sembunyikan input file standar
-            accept="image/*" // Hanya izinkan file gambar
-          />
-          {/* END --- TAMBAH INPUT FILE TERSEMBUNYI */}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => fileInputRef.current?.click()} // <--- MODIFIKASI ONCLICK BUTTON
-          >
-            Upload Avatar
-          </Button>
-        </div>
-
         {/* First Name & Last Name */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -219,53 +175,7 @@ export default function AddEmployeeForm({
             />
           </div>
         </div>
-
-        {/* Mobile Number & NIK */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="mobileNumber">Mobile Number</Label>
-            <Input
-              id="mobileNumber"
-              placeholder="Enter your Mobile Number"
-              value={formData.mobileNumber ?? ""}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
-                if (value.length <= 13) {
-                  handleChange({
-                    ...e,
-                    target: { ...e.target, id: "mobileNumber", value },
-                  });
-                }
-              }}
-              type="tel"
-              pattern="[0-9]{10,13}"
-              minLength={10}
-              maxLength={13}
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor="nik">NIK</Label>
-            <Input
-              id="nik"
-              placeholder="Enter your NIK (16 digits)"
-              value={formData.nik ?? ""}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
-                if (value.length <= 16) {
-                  handleChange({
-                    ...e,
-                    target: { ...e.target, id: "nik", value },
-                  });
-                }
-              }}
-              pattern="[0-9]{16}"
-              minLength={16}
-              maxLength={16}
-              required
-            />
-          </div>
-        </div>
+        
         {/* Gender & Last Education */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="w-full">
@@ -283,81 +193,6 @@ export default function AddEmployeeForm({
               </SelectContent>
             </Select>
           </div>
-
-          <div className="w-full">
-            <Label htmlFor="lastEducation">Last Education</Label>
-            <Select
-              onValueChange={(value) =>
-                handleSelectChange("lastEducation", value)
-              }
-              value={formData.lastEducation}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="-Choose Last Education-" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="SD">SD</SelectItem>
-                <SelectItem value="SMP">SMP</SelectItem>
-                <SelectItem value="SMA/SMK">SMA/SMK</SelectItem>
-                <SelectItem value="D2">D2</SelectItem>
-                <SelectItem value="D3">D3</SelectItem>
-                <SelectItem value="D4">D4</SelectItem>
-                <SelectItem value="S1">S1</SelectItem>
-                <SelectItem value="S2">S2</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Place Birth & Date Birth */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="placeBirth">Place birth</Label>
-            <Input
-              id="placeBirth"
-              placeholder="Enter place of birth"
-              value={formData.placeBirth ?? ""}
-              onChange={(e) => {
-                const value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // Only letters and spaces
-                handleChange({
-                  ...e,
-                  target: { ...e.target, id: "placeBirth", value },
-                });
-              }}
-              pattern="[a-zA-Z\s]+"
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor="dateBirth">Date birth</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className="w-full justify-start text-left font-normal"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {formData.dateBirth ? (
-                    format(formData.dateBirth, "PPP")
-                  ) : (
-                    <span>Enter date of birth</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={formData.dateBirth || undefined}
-                  onSelect={handleDateChange}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        {/* Role & Branch */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="role">Role</Label>
             <Input
@@ -375,6 +210,10 @@ export default function AddEmployeeForm({
               required
             />
           </div>
+        </div>
+
+        {/* Role & Branch */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="branch">Branch</Label>
             <Input
@@ -391,6 +230,22 @@ export default function AddEmployeeForm({
               pattern="[a-zA-Z0-9\s]+"
               required
             />
+          </div>
+          <div className="w-full">
+            <Label htmlFor="ShiftType">Shift Type</Label>
+            <Select
+              onValueChange={(value) => handleSelectChange("ShiftType", value)}
+              value={formData.ShiftType}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="-Choose Shift-" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ShiftType1">Shift 1</SelectItem>
+                <SelectItem value="ShiftType2">Shift 2</SelectItem>
+                <SelectItem value="ShiftType3">Shift 3</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -423,85 +278,6 @@ export default function AddEmployeeForm({
               </div>
             </RadioGroup>
           </div>
-
-          <div className="w-full">
-            <Label htmlFor="ShiftType">Shift Type</Label>
-            <Select
-              onValueChange={(value) => handleSelectChange("ShiftType", value)}
-              value={formData.ShiftType}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="-Choose Shift-" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ShiftType1">Shift 1</SelectItem>
-                <SelectItem value="ShiftType2">Shift 2</SelectItem>
-                <SelectItem value="ShiftType3">Shift 3</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Bank & Account Number */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="w-full">
-            <Label htmlFor="bank">Bank</Label>
-            <Select
-              onValueChange={(value) => handleSelectChange("bank", value)}
-              value={formData.bank}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="-choose your bank-" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="BCA">BCA</SelectItem>
-                <SelectItem value="Mandiri">Mandiri</SelectItem>
-                <SelectItem value="BNI">BNI</SelectItem>
-                <SelectItem value="BRI">BRI</SelectItem>
-                <SelectItem value="CIMB">CIMB Niaga</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="accountNumber">Account Number</Label>
-            <Input
-              id="accountNumber"
-              placeholder="Enter your account number"
-              value={formData.accountNumber ?? ""}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
-                if (value.length <= 20) {
-                  handleChange({
-                    ...e,
-                    target: { ...e.target, id: "accountNumber", value },
-                  });
-                }
-              }}
-              required
-            />
-          </div>
-        </div>
-
-        {/* Account Name & SP Type */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="accountName">Account Name</Label>
-            <Input
-              id="accountName"
-              placeholder="Enter the account name"
-              value={formData.accountName ?? ""}
-              onChange={(e) => {
-                const value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // Only letters and spaces
-                handleChange({
-                  ...e,
-                  target: { ...e.target, id: "accountName", value },
-                });
-              }}
-              pattern="[a-zA-Z\s]+"
-              required
-            />
-          </div>
           <div className="w-full">
             <Label htmlFor="spType">SP Type</Label>
             <Select
@@ -518,14 +294,19 @@ export default function AddEmployeeForm({
               </SelectContent>
             </Select>
           </div>
+          
         </div>
-
         {/* Action Buttons */}
         <div className="flex justify-end space-x-4 mt-8">
-          <Button type="button" variant="outline" onClick={handleCancel}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCancel}
+            className="text-red-600 border-red-600 hover:text-white hover:bg-red-600"
+          >
             Cancel
           </Button>
-          <Button type="submit">Save</Button>
+          <Button type="submit" className="bg-[#1F633D]">Save</Button>
         </div>
       </form>
     </div>
