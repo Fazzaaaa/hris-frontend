@@ -3,14 +3,23 @@
 import { FiBell } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image"; // Import Next.js Image component
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"; // Import Popover components
+} from "@/components/ui/popover";
 
-// Contoh data notifikasi (sama seperti sebelumnya)
+// Interface untuk user data
+interface UserData {
+  id: string;
+  name: string;
+  profileImage?: string; // URL foto profil
+  role: 'admin' | 'user' | 'guest';
+}
+
+// Contoh data notifikasi
 interface Notification {
   id: number;
   message: string;
@@ -25,35 +34,70 @@ const mockNotifications: Notification[] = [
 type NavbarProps = {
   title: string;
   toggleSidebar?: () => void;
+  userData?: UserData; // Tambahan prop untuk data user
 };
 
-export default function Nav({ title }: { title: string }) {
+export default function Nav({ title, userData }: NavbarProps) {
   const pathname = usePathname();
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
-  // State untuk mengontrol popover visibility tidak diperlukan secara eksplisit lagi
-  // Popover Shadcn akan mengelola itu secara internal.
+  const [currentUser, setCurrentUser] = useState<UserData | null>(userData || null);
 
-  const userName =
-    pathname.startsWith("/user")
-      ? "User"
-      : pathname.startsWith("/admin")
-      ? "Admin"
-      : "Guest";
+  // Fallback username berdasarkan pathname jika userData tidak tersedia
+  const fallbackUserName = pathname.startsWith("/user")
+    ? "User"
+    : pathname.startsWith("/admin")
+    ? "Admin"
+    : "Guest";
+
+  const userName = currentUser?.name || fallbackUserName;
+  const profileImage = currentUser?.profileImage;
+
+  // Fungsi untuk mengambil data user (contoh implementasi)
+  useEffect(() => {
+    if (!userData) {
+      // Simulasi fetch user data dari API/context/localStorage
+      fetchUserData();
+    }
+  }, [userData]);
+
+  const fetchUserData = async () => {
+    try {
+      // Contoh: ambil dari localStorage atau API
+      const userFromStorage = localStorage.getItem('userData');
+      if (userFromStorage) {
+        setCurrentUser(JSON.parse(userFromStorage));
+        return;
+      }
+
+      // Atau fetch dari API
+      // const response = await fetch('/api/user/profile');
+      // const userData = await response.json();
+      // setCurrentUser(userData);
+      
+      // Untuk demo, set data dummy
+      const dummyUser: UserData = {
+        id: '1',
+        name: 'John Doe',
+        profileImage: '/images/profile-placeholder.jpg', // Path ke foto profil
+        role: pathname.startsWith("/admin") ? 'admin' : 'user'
+      };
+      setCurrentUser(dummyUser);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   const unreadNotificationsCount = notifications.filter(n => !n.read).length;
 
-  // Fungsi untuk menandai notifikasi sebagai dibaca saat popover dibuka
   const handleOpenChange = (open: boolean) => {
-    if (open) { // Jika popover sedang dibuka
+    if (open) {
       setNotifications(prevNotifs =>
         prevNotifs.map(notif => ({ ...notif, read: true }))
       );
     }
-    // Jika ditutup, tidak perlu melakukan apa-apa di sini kecuali ada logika khusus
   };
 
   const handleNotificationClick = (id: number) => {
-    // Logika untuk menangani klik pada notifikasi individual
     setNotifications(prevNotifs =>
       prevNotifs.map(notif =>
         notif.id === id ? { ...notif, read: true } : notif
@@ -62,20 +106,44 @@ export default function Nav({ title }: { title: string }) {
     console.log(`Notifikasi ID ${id} diklik!`);
   };
 
+  // Komponen untuk menampilkan foto profil
+  const ProfileImage = () => {
+    if (profileImage) {
+      return (
+        <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-gray-300">
+          <Image
+            src={profileImage}
+            alt={`${userName} profile`}
+            fill
+            className="object-cover"
+            onError={(e) => {
+              // Fallback jika gambar gagal dimuat
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+              target.nextElementSibling?.classList.remove('hidden');
+            }}
+          />
+          <FaUserCircle className="text-2xl text-gray-400 hidden" />
+        </div>
+      );
+    }
+    
+    // Fallback ke icon default
+    return <FaUserCircle className="text-2xl text-gray-400" />;
+  };
+
   return (
-    <div
-      className="top-0 w-full z-50** flex items-center justify-between px-6 py-3 bg-white text-black shadow-md"
-    >
+    <div className="top-0 w-full z-50 flex items-center justify-between px-6 py-3 bg-white text-black shadow-md">
       {/* Kiri: Judul */}
-      <h1 className="text-lg font-bold ">{title}</h1>
+      <h1 className="text-lg font-bold">{title}</h1>
+      
       {/* Kanan: Icon dan Info User */}
       <div className="flex items-center gap-4">
-        {/* Menggunakan Popover dari Shadcn/ui */}
-        <Popover onOpenChange={handleOpenChange}> {/* Tambahkan onOpenChange */}
+        {/* Popover Notifikasi */}
+        <Popover onOpenChange={handleOpenChange}>
           <PopoverTrigger asChild>
-            <div className="relative p-2 rounded-full hover:bg-white hover:text-[#1C3D5A] transition cursor-pointer">
+            <div className="relative p-2 rounded-full hover:bg-gray-100 hover:text-[#1C3D5A] transition cursor-pointer">
               <FiBell className="text-lg" />
-              {/* Bubble Notifikasi Merah */}
               {unreadNotificationsCount > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
                   {unreadNotificationsCount}
@@ -83,8 +151,8 @@ export default function Nav({ title }: { title: string }) {
               )}
             </div>
           </PopoverTrigger>
-          <PopoverContent className="w-72 p-0"> {/* Sesuaikan lebar dan padding PopoverContent */}
-            <div className="p-3 border-b border-gray-200 font-semibold text-gray-800 ">
+          <PopoverContent className="w-72 p-0">
+            <div className="p-3 border-b border-gray-200 font-semibold text-gray-800">
               Notifikasi ({unreadNotificationsCount} Belum Dibaca)
             </div>
             {notifications.length === 0 ? (
@@ -115,8 +183,12 @@ export default function Nav({ title }: { title: string }) {
             </div>
           </PopoverContent>
         </Popover>
-        <FaUserCircle className="text-2xl" />
-        <span className="text-sm">{userName}</span>
+
+        {/* Profile Section */}
+        <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 rounded-lg px-2 py-1 transition">
+          <ProfileImage />
+          <span className="text-sm font-medium">{userName}</span>
+        </div>
       </div>
     </div>
   );
