@@ -52,7 +52,7 @@ const adminMenuItems = [
   {
     icon: <MdDrafts />,
     path: "/admin/letter-management",
-    label: "Letter Management",
+    label: "Letter Manager",
   },
   { icon: <MdPayments />, path: "/admin/pricing", label: "Payment Plan" },
 ];
@@ -60,7 +60,7 @@ const adminMenuItems = [
 const userMenuItems = [
   { icon: <MdSpaceDashboard />, path: "/user/dashboard", label: "Dashboard" },
   { icon: <MdAccessTime />, path: "/user/checkclock", label: "Checkclock" },
-  { icon: <MdAssignment />, path: "/user/letter-management", label: "Letter" },
+  { icon: <MdAssignment />, path: "/user/letter-management", label: "Letter Manager" },
   { icon: <MdPerson />, path: "/user/profile", label: "Profile" },
 ];
 
@@ -96,7 +96,7 @@ export default function Sidebar() {
         {/* Logo */}
       <aside className="group/sidebar h-screen sticky top-0 transition-all duration-300 bg-[#1e3a5f] shadow-md hover:w-48 w-16 flex flex-col">
         <div
-          className="flex items-center gap-2 px-3 py-4 pl-5 cursor-pointer"
+          className="flex items-center gap-2 px-3 py-4 pl-5 cursor-pointer bg-white"
           onClick={() => {
             if (activePath.startsWith("/admin"))
               router.push("/admin/dashboard");
@@ -110,7 +110,7 @@ export default function Sidebar() {
             alt="Logo"
             className="w-6 h-auto"
           />
-          <span className="hidden group-hover/sidebar:inline-block text-2xl font-semibold relative top-1 left-5 text-white">
+          <span className="hidden group-hover/sidebar:inline-block text-2xl font-semibold relative top-1 left-5 text-Black">
             HRIS
           </span>
         </div>

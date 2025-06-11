@@ -73,13 +73,13 @@ interface Employee {
   spType: string;
   companyUsername: string;
   password: string;
-  //status: boolean;
+  shiftType: string; 
 }
 // Contoh data karyawan (mock data)
 const mockEmployees: Employee[] = [
   {
     no: 1,
-    avatar: "/avatars/1.png",
+    avatar: "",
     firstName: "Juanita",
     lastName: "Smith",
     mobileNumber: "08111111111",
@@ -98,11 +98,11 @@ const mockEmployees: Employee[] = [
     spType: "SP1",
     companyUsername: "EMP001",
     password: "password123",
-    //status: true,
+    shiftType:"",
   },
   {
     no: 2,
-    avatar: "/avatars/1.png",
+    avatar: "",
     firstName: "Broni",
     lastName: "Smith",
     mobileNumber: "08111111111",
@@ -121,7 +121,7 @@ const mockEmployees: Employee[] = [
     spType: "SP1",
     companyUsername: "EMP002",
     password: "password123",
-    //status: true,
+    shiftType: "",
   },
 ];
 
@@ -593,28 +593,13 @@ export default function EmployeeTable() {
           </Select>
         </div>
 
+        {/* Separator */}
+        <div className="border-l border-gray-300 h-12"></div>
+
         {/* Kolom Total Employee */}
         <div className="flex flex-col items-center">
           <span className="text-sm text-gray-500 mb-1">Total Employee</span>
           <span className="text-2xl font-bold">{totalEmployee}</span>
-        </div>
-
-        {/* Separator */}
-        <div className="border-l border-gray-300 h-12"></div>
-
-        {/* Kolom Total New Hire */}
-        <div className="flex flex-col items-center">
-          <span className="text-sm text-gray-500 mb-1">Total New Hire</span>
-          <span className="text-2xl font-bold">{totalNewHire}</span>
-        </div>
-
-        {/* Separator */}
-        <div className="border-l border-gray-300 h-12"></div>
-
-        {/* Kolom Full Time Employee */}
-        <div className="flex flex-col items-center">
-          <span className="text-sm text-gray-500 mb-1">Full Time Employee</span>
-          <span className="text-2xl font-bold">{fullTimeEmployee}</span>
         </div>
       </div>
       {/* Akhir Bagian Periode dan Statistik */}
@@ -784,7 +769,7 @@ export default function EmployeeTable() {
             </svg>
             Import
           </Button>
-          <Button onClick={goToAddEmployeePage}>
+          <Button onClick={goToAddEmployeePage} className="bg-[#2D8DFE] text-white">
             <svg
               className="mr-2 h-4 w-4"
               fill="none"
@@ -799,56 +784,53 @@ export default function EmployeeTable() {
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               ></path>
             </svg>
-            Tambah Data
+            Add Employee
           </Button>
         </div>
       </div>
 
       {/* Tabel Karyawan */}
       <Table>
-        <TableHeader>
-          <TableRow className="bg-[#E3E3E3] ">
+        <TableHeader >
+          <TableRow className="bg-[#1E3A5F] hover:bg-[#1E3A5F]">
             <TableHead
-              className="cursor-pointer"
+              className="cursor-pointer text-white"
               onClick={() => handleSort("no")}
             >
               No. {renderSortIndicator("no")}
             </TableHead>
-            <TableHead>Avatar</TableHead>
+            <TableHead className="text-white" >Avatar</TableHead>
             <TableHead
-              className="cursor-pointer"
+              className="cursor-pointer text-white"
               onClick={() => handleSort("firstName")}
             >
               Name {renderSortIndicator("firstName")}
             </TableHead>
             <TableHead
-              className="cursor-pointer"
+              className="cursor-pointer text-white"
               onClick={() => handleSort("gender")}
             >
               Gender {renderSortIndicator("gender")}
             </TableHead>
             <TableHead
-              className="cursor-pointer"
+              className="cursor-pointer text-white"
               onClick={() => handleSort("mobileNumber")}
             >
               Mobile Number {renderSortIndicator("mobileNumber")}
             </TableHead>
             <TableHead
-              className="cursor-pointer"
+              className="cursor-pointer text-white"
               onClick={() => handleSort("branch")}
             >
               Branch {renderSortIndicator("branch")}
             </TableHead>
             <TableHead
-              className="cursor-pointer"
+              className="cursor-pointer text-white"
               onClick={() => handleSort("role")}
             >
               Role {renderSortIndicator("role")}
             </TableHead>
-            {/* <TableHead className="cursor-pointer" onClick={() => handleSort("status")}>
-              Status {renderSortIndicator("status")}
-            </TableHead> */}
-            <TableHead>Action</TableHead>
+            <TableHead className="text-white">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -1009,9 +991,9 @@ export default function EmployeeTable() {
           className="w-[400px] sm:w-[540px] overflow-y-auto"
         >
           <SheetHeader>
-            <SheetTitle>Detail Karyawan</SheetTitle>
+            <SheetTitle>Employee Detail</SheetTitle>
             <SheetDescription>
-              Informasi lengkap mengenai karyawan ini.
+              Contains detailed information about the employee.
             </SheetDescription>
           </SheetHeader>
           {selectedEmployee ? (
@@ -1037,21 +1019,21 @@ export default function EmployeeTable() {
               {/* Informasi Pribadi */}
               <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
                 <h3 className="text-lg font-semibold mb-3 text-gray-700 border-b pb-2">
-                  Informasi Pribadi
+                  Personal Information
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                   <div>
-                    <p className="font-medium text-gray-500">Nama Depan</p>
+                    <p className="font-medium text-gray-500">First Name</p>
                     <p className="text-gray-900">
                       {selectedEmployee.firstName}
                     </p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Nama Belakang</p>
+                    <p className="font-medium text-gray-500">Last Name</p>
                     <p className="text-gray-900">{selectedEmployee.lastName}</p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Nomor Telepon</p>
+                    <p className="font-medium text-gray-500">Mobile Number</p>
                     <p className="text-gray-900">
                       {selectedEmployee.mobileNumber}
                     </p>
@@ -1061,25 +1043,25 @@ export default function EmployeeTable() {
                     <p className="text-gray-900">{selectedEmployee.nik}</p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Jenis Kelamin</p>
+                    <p className="font-medium text-gray-500">Gender</p>
                     <p className="text-gray-900">{selectedEmployee.gender}</p>
                   </div>
                   <div>
                     <p className="font-medium text-gray-500">
-                      Pendidikan Terakhir
+                      Last Education
                     </p>
                     <p className="text-gray-900">
                       {selectedEmployee.lastEducation}
                     </p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Tempat Lahir</p>
+                    <p className="font-medium text-gray-500">Place of Birth</p>
                     <p className="text-gray-900">
                       {selectedEmployee.placeBirth}
                     </p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Tanggal Lahir</p>
+                    <p className="font-medium text-gray-500">Date of Birth</p>
                     <p className="text-gray-900">
                       {selectedEmployee.dateBirth
                         ? format(selectedEmployee.dateBirth, "dd MMMM yyyy")
@@ -1104,50 +1086,38 @@ export default function EmployeeTable() {
               {/* Informasi Pekerjaan */}
               <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
                 <h3 className="text-lg font-semibold mb-3 text-gray-700 border-b pb-2">
-                  Informasi Pekerjaan
+                  Job Information
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                   <div>
-                    <p className="font-medium text-gray-500">ID Karyawan</p>
-                    <p className="text-gray-900">
-                      {selectedEmployee.companyUsername}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-500">Peran</p>
+                    <p className="font-medium text-gray-500">Role</p>
                     <p className="text-gray-900">{selectedEmployee.role}</p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Cabang</p>
+                    <p className="font-medium text-gray-500">Branch</p>
                     <p className="text-gray-900">{selectedEmployee.branch}</p>
                   </div>
-                  {/* <div>
-                    <p className="font-medium text-gray-500">Grade</p>
-                    <p className="text-gray-900">{selectedEmployee.grade}</p>
-                  </div> */}
                   <div>
-                    <p className="font-medium text-gray-500">Tipe Kontrak</p>
+                    <p className="font-medium text-gray-500">Contract Type</p>
                     <p className="text-gray-900">
                       {selectedEmployee.contractType}
                     </p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Tipe SP</p>
+                    <p className="font-medium text-gray-500">SP Type</p>
                     <p className="text-gray-900">{selectedEmployee.spType}</p>
                   </div>
-                  {/* <div>
-                    <p className="font-medium text-gray-500">Status</p>
-                    <p className={`font-semibold ${selectedEmployee.status ? 'text-green-600' : 'text-red-600'}`}>
-                      {selectedEmployee.status ? 'Aktif' : 'Tidak Aktif'}
-                    </p>
-                  </div> */}
+                  <div>
+                    <p className="font-medium text-gray-500">Shift Type</p>
+                    <p className="text-gray-900">{selectedEmployee.shiftType}</p>
+                  </div>
                 </div>
               </div>
 
               {/* Informasi Bank */}
               <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
                 <h3 className="text-lg font-semibold mb-3 text-gray-700 border-b pb-2">
-                  Informasi Bank
+                  Bank Information
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                   <div>
@@ -1155,13 +1125,13 @@ export default function EmployeeTable() {
                     <p className="text-gray-900">{selectedEmployee.bank}</p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Nomor Rekening</p>
+                    <p className="font-medium text-gray-500">Account Number</p>
                     <p className="text-gray-900">
                       {selectedEmployee.accountNumber}
                     </p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-500">Nama Rekening</p>
+                    <p className="font-medium text-gray-500">Account Name</p>
                     <p className="text-gray-900">
                       {selectedEmployee.accountName}
                     </p>
