@@ -11,6 +11,7 @@ import {
   MdLogout,
   MdDrafts,
   MdSupportAgent,
+  MdPerson,
 } from "react-icons/md";
 import { logout } from "@/app/services/auth";
 
@@ -60,6 +61,7 @@ const userMenuItems = [
   { icon: <MdSpaceDashboard />, path: "/user/dashboard", label: "Dashboard" },
   { icon: <MdAccessTime />, path: "/user/checkclock", label: "Checkclock" },
   { icon: <MdAssignment />, path: "/user/letter-management", label: "Letter" },
+  { icon: <MdPerson />, path: "/user/profile", label: "Profile" },
 ];
 
 export default function Sidebar() {
@@ -91,8 +93,8 @@ export default function Sidebar() {
   return (
     <>
       {/* Sidebar */}
-      <aside className="group/sidebar h-screen sticky top-0 transition-all duration-300 bg-[#1e3a5f] shadow-md hover:w-48 w-16 flex flex-col">
         {/* Logo */}
+      <aside className="group/sidebar h-screen sticky top-0 transition-all duration-300 bg-[#1e3a5f] shadow-md hover:w-48 w-16 flex flex-col">
         <div
           className="flex items-center gap-2 px-3 py-4 pl-5 cursor-pointer"
           onClick={() => {
